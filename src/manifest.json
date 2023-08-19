@@ -1,0 +1,32 @@
+{
+    "name": "EXBO Forum - True Ignore",
+    "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
+    "version": "0.1",
+    "manifest_version": 3,
+    "icons": {
+        "16":"icons/16.png",
+        "32":"icons/32.png",
+        "48":"icons/48.png",
+        "128":"icons/128.png"
+    },
+    "action": {},
+  "permissions": [
+    "webRequest",
+    "webNavigation",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://forum.exbo.net/"
+  ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+          "js": ["index.js"],
+          "matches": [
+            "https://forum.exbo.net/*"
+          ]
+        }
+      ]
+}

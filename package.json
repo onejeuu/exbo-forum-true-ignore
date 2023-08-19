@@ -1,0 +1,26 @@
+{
+  "name": "exbo-forum-true-ignore",
+  "version": "0.1",
+  "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
+  "author": "Nikita Bezrukov",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chrome": "^0.0.243",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "git-revision-webpack-plugin": "^5.0.0",
+    "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
+    "ts-loader": "^9.4.4",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "zip-webpack-plugin": "^4.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
