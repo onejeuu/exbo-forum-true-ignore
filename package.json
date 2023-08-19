@@ -6,6 +6,18 @@
   "scripts": {
     "build": "webpack --mode=production"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stalcraft-Dev-Team/EXBO-Forum-True-Ignore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Stalcraft-Dev-Team/EXBO-Forum-True-Ignore/issues"
+  },
+  "keywords": [
+    "stalcraft",
+    "exbo",
+    "forum"
+  ],
   "author": "Nikita Bezrukov",
   "license": "ISC",
   "dependencies": {
