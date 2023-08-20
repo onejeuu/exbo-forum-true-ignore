@@ -12,6 +12,7 @@ module.exports = (env, {mode} = {}) => ({
     entry: {
         background: './src/background.ts',
         index: './src/index.ts',
+        popup: './src/popup.ts'
     },
     output: {
         publicPath: '/',
@@ -85,20 +86,25 @@ module.exports = (env, {mode} = {}) => ({
         //     filename: 'devtool.html',
         //     chunks: ['devtool'],
         // }),
-        // new HtmlWebpackPlugin({
-        //     template: './src/panel.html',
-        //     filename: 'panel.html',
-        //     chunks: ['panel'],
-        // }),
+        new HtmlWebpackPlugin({
+            template: './src/popup.html',
+            filename: 'popup.html',
+            chunks: ['popup'],
+        }),
         // new MiniCssExtractPlugin({
         //     filename: '[name].css',
         //     chunkFilename: '[name]-[id].css',
         // }),
         new CopyWebpackPlugin({
-            patterns: ['./src/manifest.json', {from: './src/icons', to: 'icons'}],
+            patterns: [
+                './src/manifest.json',
+                './src/popup.css',
+                './src/fa-regular-400.woff2',
+                { from: './src/icons', to: 'icons' },
+            ],
         }),
         ...(mode === 'production'
-            ? [new CleanWebpackPlugin(), /*new GitRevisionPlugin(),*/ /*new ZipPlugin({filename: 'exbo-forum-true-ignore'})*/]
+            ? [new CleanWebpackPlugin(), /*new GitRevisionPlugin(),*/ new ZipPlugin({filename: 'exbo-forum-true-ignore'})]
             : []),
     ],
     watch: mode === 'development',

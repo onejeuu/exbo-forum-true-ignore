@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "fa";
+    src: url("fa-regular-400.woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: fa, serif;
+    color: whitesmoke;
+}
+
+body {
+    text-align: center;
+    width: 320px;
+    height: auto;
+    background-color: #141c1f;
+    border-radius: 32px;
+}
+
+h2, h3 {
+    margin: 12px 4px;
+    padding: 2px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+.on, .off {
+    border: 2px solid;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.on {
+    border-color: lawngreen;
+}
+
+.off {
+    border-color: red;
+}
+
+.links-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+a > img {
+    width: auto;
+    height: 32px;
+    margin: 2px 8px;
+}
