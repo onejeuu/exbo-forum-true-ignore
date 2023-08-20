@@ -1,5 +1,6 @@
 export const StorageKeys = {
     HideDiscussions: "hideDiscussions",
+    HideMessages: 'hideMessages',
     HideUsersInDiscussions: "hideUsersInDiscussions"
 }
 
@@ -34,7 +35,7 @@ async function SwitchValues(elemId: string, switchType: number) {
     }
 }
 
-async function GetSyncValueByKey(key = '') {
+async function GetSyncValueByKey(key: string) {
     return (await chrome.storage.sync.get([key]))[key];
 }
 
@@ -43,8 +44,7 @@ const init = async () => {
     const togglePosts = document.getElementById(elementId)! as HTMLInputElement;
 
     if (await GetSyncValueByKey(StorageKeys.HideDiscussions) === undefined) {
-        const obj = {};
-        // @ts-ignore
+        const obj: any = {};
         obj[StorageKeys.HideDiscussions] = true;
         await chrome.storage.sync.set(obj);
     }
