@@ -1,7 +1,7 @@
 {
   "name": "EXBO Forum - True Ignore",
   "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
-  "version": "0.1",
+  "version": "0.2",
   "manifest_version": 3,
   "icons": {
     "16": "icons/16.png",
@@ -14,12 +14,15 @@
   },
   "permissions": [
     "storage",
+    "activeTab",
     "tabs"
   ],
   "host_permissions": [
     "https://forum.exbo.net/"
   ],
-  "background": {},
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "all_frames" : false,
