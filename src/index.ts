@@ -1,3 +1,5 @@
+import {StorageKeys} from "@/popup";
+
 console.log('True Ignore активирован!');
 
 
@@ -8,22 +10,29 @@ let discussionCount: number = -1;
 let isCleaningNow: boolean = false;
 
 if (feed) {
-    deleteIgnoredDiscussions();
+    chrome.storage.sync.get([StorageKeys.HideDiscussions])
+        .then((result) => {
+            if (result[StorageKeys.HideDiscussions]) {
+                deleteIgnoredDiscussions();
 
-    const observer = new MutationObserver(mutationList =>
-        mutationList
-            .filter(m => m.type === 'childList')
-            .forEach(m => {
-                m.addedNodes.forEach(() => {
-                    if (isCleaningNow)
-                        return;
+                const observer = new MutationObserver(mutationList =>
+                    mutationList
+                        .filter(m => m.type === 'childList')
+                        .forEach(m => {
+                            m.addedNodes.forEach(() => {
+                                if (isCleaningNow)
+                                    return;
 
-                    isCleaningNow = true;
-                    deleteIgnoredDiscussions();
-                    isCleaningNow = false;
-                });
-            }));
-    observer.observe(feed, {childList: true, subtree: true});
+                                isCleaningNow = true;
+                                deleteIgnoredDiscussions();
+                                isCleaningNow = false;
+                            });
+                        }));
+                observer.observe(feed, {childList: true, subtree: true});
+            } else {
+                console.log('Удаление дискуссий выключено.')
+            }
+        })
 }
 
 function deleteIgnoredDiscussions() {

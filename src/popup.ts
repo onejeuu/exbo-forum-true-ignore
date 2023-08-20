@@ -1,4 +1,4 @@
-const StorageKeys = {
+export const StorageKeys = {
     HideDiscussions: "hideDiscussions",
     HideUsersInDiscussions: "hideUsersInDiscussions"
 }
