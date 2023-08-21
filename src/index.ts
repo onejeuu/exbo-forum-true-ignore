@@ -48,7 +48,7 @@ async function HideDiscussions() {
 
         const dataIdsToDelete: string[] = [];
 
-        console.log('Поиск непотребств...');
+        console.log('Поиск непотребных дискуссий...');
         feed.childNodes.forEach((li) => {
             const _li: HTMLLIElement = li as HTMLLIElement;
             if (_li.getElementsByClassName('item-user-discussion-ignored')[0] && _li.dataset?.id) {
@@ -64,14 +64,14 @@ async function HideDiscussions() {
         });
 
         if (elemsToHide.length > 0) {
-            console.log('Удаление непотребств...');
+            console.log('Удаление непотребных дискуссий...');
 
             elemsToHide.forEach((elem) => {
                 elem.style.display = 'none';
                 elem.classList.add(ClassTypes.HideElement);
             });
 
-            console.log('Непотребства удалены!');
+            console.log('Непотребные дискуссии удалены!');
         }
 
         discussionCount = feed.childNodes.length;
@@ -98,63 +98,78 @@ async function CollectIgnoredUsers() {
 }
 
 // Удаление сообщений в дискуссиях
-async function DeleteMessagesInDiscussions() {
-    let feed: Element = document.getElementsByClassName('PostStream')[0];
+async function HideMessagesInDiscussions() {
+    let messagesFeed: Element = document.getElementsByClassName('PostStream')[0];
     let messagesCount: number = -1;
-
     let isCleaningNow: boolean = false;
 
-    if (feed) {
-        chrome.storage.sync.get([StorageKeys.HideMessages])
-            .then((result) => {
-                if (result[StorageKeys.HideMessages]) {
-                    deleteMessages();
+    const interval = setInterval(() => {
+        if (messagesFeed === undefined || (messagesFeed && messagesFeed.classList.contains(ClassTypes.HasEvent))) {
+            messagesFeed = document.getElementsByClassName('PostStream')[0];
+        } else {
+            messagesFeed.classList.add(ClassTypes.HasEvent)
+            chrome.storage.sync.get([StorageKeys.HideMessages])
+                .then((result) => {
+                    if (result[StorageKeys.HideMessages]) {
+                        hideMessages();
 
-                    const observer = new MutationObserver(mutationList =>
-                        mutationList
-                            .filter(m => m.type === 'childList')
-                            .forEach(m => {
-                                m.addedNodes.forEach(() => {
-                                    if (isCleaningNow)
-                                        return;
+                        const observer = new MutationObserver(mutationList =>
+                            mutationList
+                                .filter(m => m.type === 'childList')
+                                .forEach(m => {
+                                    m.addedNodes.forEach(() => {
+                                        if (isCleaningNow)
+                                            return;
 
-                                    isCleaningNow = true;
-                                    deleteMessages();
-                                    isCleaningNow = false;
-                                });
-                            }));
-                    observer.observe(feed, {childList: true, subtree: true});
-                } else {
-                    console.log('Удаление сообщений выключено.')
-                }
-            })
-    }
+                                        isCleaningNow = true;
+                                        hideMessages();
+                                        isCleaningNow = false;
+                                    });
+                                }));
+                        observer.observe(messagesFeed, {childList: true, subtree: true});
+                    } else {
+                        console.log('Удаление сообщений выключено.')
+                    }
+                })
 
-    function deleteMessages() {
-        if (feed.childNodes.length === messagesCount)
+            clearInterval(interval);
+        }
+    }, 16.6667);
+
+    function hideMessages() {
+        if (messagesFeed.childNodes.length === messagesCount)
             return;
+
 
         const dataIdsToDelete: string[] = [];
 
         console.log('Поиск непотребных сообщений...');
-        feed.childNodes.forEach((div) => {
+        messagesFeed.childNodes.forEach((div) => {
             const _div: HTMLDivElement = div as HTMLDivElement;
             if (_div.getElementsByClassName('Post--hidden')[0] && _div.dataset?.id) {
                 dataIdsToDelete.push(_div.dataset.id);
             }
         });
 
-        if (dataIdsToDelete.length > 0) {
+        const elemsToHide: HTMLDivElement[] = [];
+        dataIdsToDelete.forEach((dataId: string) => {
+            const elem = document.querySelector(`[data-id="${dataId}"]`);
+            if (elem && !elem.classList.contains(ClassTypes.HideElement))
+                elemsToHide.push(elem as HTMLDivElement);
+        });
+
+        if (elemsToHide.length > 0) {
             console.log('Удаление непотребных сообщений...');
 
-            dataIdsToDelete.forEach((dataId: string) => {
-                document.querySelector(`[data-id="${dataId}"]`)?.remove();
+            elemsToHide.forEach((elem) => {
+                elem.style.display = 'none';
+                elem.classList.add(ClassTypes.HideElement);
             });
 
             console.log('Непотребные сообщения удалены!');
         }
 
-        messagesCount = feed.childNodes.length;
+        messagesCount = messagesFeed .childNodes.length;
     }
 }
 
@@ -167,7 +182,7 @@ chrome.runtime.onMessage.addListener(async (message: string, sender, sendRespons
             break;
         }
         case MessagesTypes.DeleteMessagesInDiscussions: {
-            // await DeleteMessagesInDiscussions(); // как доделаю
+            await HideMessagesInDiscussions(); // как доделаю
             break;
         }
         case MessagesTypes.CollectIgnoredUsers: {
