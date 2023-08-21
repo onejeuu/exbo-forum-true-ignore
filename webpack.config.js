@@ -12,7 +12,8 @@ module.exports = (env, {mode} = {}) => ({
     entry: {
         background: './src/background.ts',
         index: './src/index.ts',
-        popup: './src/popup.ts'
+        popup: './src/popup.ts',
+        constants: './src/constants.ts'
     },
     output: {
         publicPath: '/',
