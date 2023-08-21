@@ -1,13 +1,4 @@
-export const StorageKeys = {
-    HideDiscussions: "hideDiscussions",
-    HideMessages: 'hideMessages',
-    HideUsersInDiscussions: "hideUsersInDiscussions"
-}
-
-const SwitchTypes = {
-    HideDiscussions: 0,
-    HideUsersInDiscussions: 1,
-}
+import { StorageKeys, SwitchTypes } from "@/constants";
 
 async function SwitchValues(elemId: string, switchType: number) {
     const elem = document.getElementById(elemId);
