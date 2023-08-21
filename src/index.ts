@@ -2,20 +2,18 @@ import {ClassTypes, StorageKeys} from "@/constants";
 import { MessagesTypes } from "@/constants";
 
 console.log('True Ignore активирован!');
-const time = new Date().getMilliseconds();
 
 // Удаление дискуссий
 async function HideDiscussions() {
     let feed: Element = document.getElementsByClassName('DiscussionList-discussions')[0];
     let discussionCount: number = -1;
-
     let isCleaningNow: boolean = false;
 
-
     const interval = setInterval(() => {
-        if (feed === undefined) {
+        if (feed.classList.contains(ClassTypes.HasEvent)) {
             feed = document.getElementsByClassName('DiscussionList-discussions')[0];
         } else {
+            feed.classList.add(ClassTypes.HasEvent)
             chrome.storage.sync.get([StorageKeys.HideDiscussions])
                 .then((result) => {
                     if (result[StorageKeys.HideDiscussions]) {
