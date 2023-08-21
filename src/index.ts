@@ -10,7 +10,7 @@ async function HideDiscussions() {
     let isCleaningNow: boolean = false;
 
     const interval = setInterval(() => {
-        if (feed.classList.contains(ClassTypes.HasEvent)) {
+        if (feed === undefined || (feed && feed.classList.contains(ClassTypes.HasEvent))) {
             feed = document.getElementsByClassName('DiscussionList-discussions')[0];
         } else {
             feed.classList.add(ClassTypes.HasEvent)
