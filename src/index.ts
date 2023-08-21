@@ -1,47 +1,50 @@
-import { StorageKeys } from "./popup";
-const MessagesTypes = {
-    DeleteDiscussionsSubscribe: "deleteDiscussionsSubscribe",
-    DeleteMessagesInDiscussions: "deleteMessagesInDiscussions",
-    CollectIgnoredUsers: "collectIgnoredUsers",
-}
+import {ClassTypes, StorageKeys} from "@/constants";
+import { MessagesTypes } from "@/constants";
 
 console.log('True Ignore активирован!');
-
+const time = new Date().getMilliseconds();
 
 // Удаление дискуссий
-async function DeleteDiscussions() {
+async function HideDiscussions() {
     let feed: Element = document.getElementsByClassName('DiscussionList-discussions')[0];
     let discussionCount: number = -1;
 
     let isCleaningNow: boolean = false;
 
-    if (feed) {
-        chrome.storage.sync.get([StorageKeys.HideDiscussions])
-            .then((result) => {
-                if (result[StorageKeys.HideDiscussions]) {
-                    deleteIgnoredDiscussions();
 
-                    const observer = new MutationObserver(mutationList =>
-                        mutationList
-                            .filter(m => m.type === 'childList')
-                            .forEach(m => {
-                                m.addedNodes.forEach(() => {
-                                    if (isCleaningNow)
-                                        return;
+    const interval = setInterval(() => {
+        if (feed === undefined) {
+            feed = document.getElementsByClassName('DiscussionList-discussions')[0];
+        } else {
+            chrome.storage.sync.get([StorageKeys.HideDiscussions])
+                .then((result) => {
+                    if (result[StorageKeys.HideDiscussions]) {
+                        hideIgnoredDiscussions();
 
-                                    isCleaningNow = true;
-                                    deleteIgnoredDiscussions();
-                                    isCleaningNow = false;
-                                });
-                            }));
-                    observer.observe(feed, {childList: true, subtree: true});
-                } else {
-                    console.log('Удаление дискуссий выключено.')
-                }
-            })
-    }
+                        const observer = new MutationObserver(mutationList =>
+                            mutationList
+                                .filter(m => m.type === 'childList')
+                                .forEach(m => {
+                                    m.addedNodes.forEach(() => {
+                                        if (isCleaningNow)
+                                            return;
 
-    function deleteIgnoredDiscussions() {
+                                        isCleaningNow = true;
+                                        hideIgnoredDiscussions();
+                                        isCleaningNow = false;
+                                    });
+                                }));
+                        observer.observe(feed, {childList: true, subtree: true});
+                    } else {
+                        console.log('Удаление дискуссий выключено.')
+                    }
+                })
+
+            clearInterval(interval);
+        }
+    }, 16.6667);
+
+    function hideIgnoredDiscussions() {
         if (feed.childNodes.length === discussionCount)
             return;
 
@@ -55,11 +58,19 @@ async function DeleteDiscussions() {
             }
         });
 
-        if (dataIdsToDelete.length > 0) {
+        const elemsToHide: HTMLLIElement[] = [];
+        dataIdsToDelete.forEach((dataId: string) => {
+            const elem = document.querySelector(`[data-id="${dataId}"]`);
+            if (elem && !elem.classList.contains(ClassTypes.HideElement))
+            elemsToHide.push(elem as HTMLLIElement);
+        });
+
+        if (elemsToHide.length > 0) {
             console.log('Удаление непотребств...');
 
-            dataIdsToDelete.forEach((dataId: string) => {
-                document.querySelector(`[data-id="${dataId}"]`)?.remove();
+            elemsToHide.forEach((elem) => {
+                elem.style.display = 'none';
+                elem.classList.add(ClassTypes.HideElement);
             });
 
             console.log('Непотребства удалены!');
@@ -154,7 +165,7 @@ chrome.runtime.onMessage.addListener(async (message: string, sender, sendRespons
     const response = {result: true, error: ''};
     switch (message) {
         case MessagesTypes.DeleteDiscussionsSubscribe: {
-            await DeleteDiscussions();
+            await HideDiscussions();
             break;
         }
         case MessagesTypes.DeleteMessagesInDiscussions: {
