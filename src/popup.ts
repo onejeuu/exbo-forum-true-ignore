@@ -16,8 +16,8 @@ async function SwitchValues(elemId: string, switchType: number) {
             await invertAndSync(StorageKeys.HideDiscussions);
             break;
         }
-        case SwitchTypes.HideUsersInDiscussions: {
-            await invertAndSync(StorageKeys.HideUsersInDiscussions)
+        case SwitchTypes.HideMessages: {
+            await invertAndSync(StorageKeys.HideMessages)
             break;
         }
         default: {
@@ -31,8 +31,9 @@ async function GetSyncValueByKey(key: string) {
 }
 
 const init = async () => {
-    const elementId = 'toggle-posts';
-    const togglePosts = document.getElementById(elementId)! as HTMLInputElement;
+    // Дискуссии
+    const togglePostsId = 'toggle-posts';
+    const togglePosts = document.getElementById(togglePostsId)! as HTMLInputElement;
 
     if (await GetSyncValueByKey(StorageKeys.HideDiscussions) === undefined) {
         const obj: any = {};
@@ -48,9 +49,34 @@ const init = async () => {
         togglePosts.addEventListener('change', (event: Event) => {
             const isChecked = (event.target as HTMLInputElement).checked;
             if (isChecked) {
-                SwitchValues(elementId, SwitchTypes.HideDiscussions);
+                SwitchValues(togglePostsId, SwitchTypes.HideDiscussions);
             } else {
-                SwitchValues(elementId, SwitchTypes.HideDiscussions);
+                SwitchValues(togglePostsId, SwitchTypes.HideDiscussions);
+            }
+        });
+    }
+
+    // Сообщения
+    const toggleMessagesId = 'toggle-messages';
+    const toggleMessages = document.getElementById(toggleMessagesId)! as HTMLInputElement;
+
+    if (await GetSyncValueByKey(StorageKeys.HideMessages) === undefined) {
+        const obj: any = {};
+        obj[StorageKeys.HideMessages] = true;
+        await chrome.storage.sync.set(obj);
+    }
+
+    if (await GetSyncValueByKey(StorageKeys.HideMessages) === true && toggleMessages) {
+        toggleMessages.checked = true;
+    }
+
+    if (toggleMessages) {
+        toggleMessages.addEventListener('change', (event: Event) => {
+            const isChecked = (event.target as HTMLInputElement).checked;
+            if (isChecked) {
+                SwitchValues(toggleMessagesId, SwitchTypes.HideMessages);
+            } else {
+                SwitchValues(toggleMessagesId, SwitchTypes.HideMessages);
             }
         });
     }
