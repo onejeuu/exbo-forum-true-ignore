@@ -6,13 +6,12 @@ export const MessagesTypes = {
 
 export const StorageKeys = {
     HideDiscussions: "hideDiscussions",
-    HideMessages: 'hideMessages',
-    HideUsersInDiscussions: "hideUsersInDiscussions"
+    HideMessages: 'hideMessages'
 }
 
 export const SwitchTypes = {
     HideDiscussions: 0,
-    HideUsersInDiscussions: 1,
+    HideMessages: 1,
 }
 
 export const ClassTypes = {
