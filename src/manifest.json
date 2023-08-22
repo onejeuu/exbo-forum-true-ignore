@@ -1,6 +1,6 @@
 {
   "name": "True Ignore (for EXBO Forum)",
-  "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
+  "description": "Теперь игнорируемые пользователи точно будут скрыты от ваших глаз!",
   "version": "0.4",
   "manifest_version": 3,
   "icons": {
@@ -10,7 +10,8 @@
     "128": "icons/128.png"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "True Ignore"
   },
   "permissions": [
     "storage",
