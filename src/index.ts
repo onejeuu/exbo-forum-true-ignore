@@ -1,5 +1,6 @@
 import {ClassTypes, StorageKeys} from "@/constants";
 import { MessagesTypes } from "@/constants";
+import { GetStorageValue } from "@/functions";
 
 console.log('True Ignore активирован!');
 
@@ -9,35 +10,31 @@ async function HideDiscussions() {
     let discussionCount: number = -1;
     let isCleaningNow: boolean = false;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
         if (feed === undefined || (feed && feed.classList.contains(ClassTypes.HasEvent))) {
             feed = document.getElementsByClassName('DiscussionList-discussions')[0];
         } else {
             feed.classList.add(ClassTypes.HasEvent)
-            chrome.storage.sync.get([StorageKeys.HideDiscussions])
-                .then((result) => {
-                    if (result[StorageKeys.HideDiscussions]) {
-                        hideIgnoredDiscussions();
+            const result: boolean = await GetStorageValue(StorageKeys.HideDiscussions);
+            if (result) {
+                hideIgnoredDiscussions();
+                const observer = new MutationObserver(mutationList =>
+                    mutationList
+                        .filter(m => m.type === 'childList')
+                        .forEach(m => {
+                            m.addedNodes.forEach(() => {
+                                if (isCleaningNow)
+                                    return;
 
-                        const observer = new MutationObserver(mutationList =>
-                            mutationList
-                                .filter(m => m.type === 'childList')
-                                .forEach(m => {
-                                    m.addedNodes.forEach(() => {
-                                        if (isCleaningNow)
-                                            return;
-
-                                        isCleaningNow = true;
-                                        hideIgnoredDiscussions();
-                                        isCleaningNow = false;
-                                    });
-                                }));
-                        observer.observe(feed, {childList: true, subtree: true});
-                    } else {
-                        console.log('Удаление дискуссий выключено.')
-                    }
-                })
-
+                                isCleaningNow = true;
+                                hideIgnoredDiscussions();
+                                isCleaningNow = false;
+                            });
+                        }));
+                observer.observe(feed, {childList: true, subtree: true});
+            } else {
+                console.log('Удаление дискуссий выключено.')
+            }
             clearInterval(interval);
         }
     }, 16.6667);
@@ -103,35 +100,31 @@ async function HideMessagesInDiscussions() {
     let messagesCount: number = -1;
     let isCleaningNow: boolean = false;
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
         if (messagesFeed === undefined || (messagesFeed && messagesFeed.classList.contains(ClassTypes.HasEvent))) {
             messagesFeed = document.getElementsByClassName('PostStream')[0];
         } else {
-            messagesFeed.classList.add(ClassTypes.HasEvent)
-            chrome.storage.sync.get([StorageKeys.HideMessages])
-                .then((result) => {
-                    if (result[StorageKeys.HideMessages]) {
-                        hideMessages();
+            messagesFeed.classList.add(ClassTypes.HasEvent);
+            const result: boolean = await GetStorageValue(StorageKeys.HideMessages);
+            if (result) {
+                hideMessages();
+                const observer = new MutationObserver(mutationList =>
+                    mutationList
+                        .filter(m => m.type === 'childList')
+                        .forEach(m => {
+                            m.addedNodes.forEach(() => {
+                                if (isCleaningNow)
+                                    return;
 
-                        const observer = new MutationObserver(mutationList =>
-                            mutationList
-                                .filter(m => m.type === 'childList')
-                                .forEach(m => {
-                                    m.addedNodes.forEach(() => {
-                                        if (isCleaningNow)
-                                            return;
-
-                                        isCleaningNow = true;
-                                        hideMessages();
-                                        isCleaningNow = false;
-                                    });
-                                }));
-                        observer.observe(messagesFeed, {childList: true, subtree: true});
-                    } else {
-                        console.log('Удаление сообщений выключено.')
-                    }
-                })
-
+                                isCleaningNow = true;
+                                hideMessages();
+                                isCleaningNow = false;
+                            });
+                        }));
+                observer.observe(messagesFeed, {childList: true, subtree: true});
+            } else {
+                console.log('Удаление сообщений выключено.')
+            }
             clearInterval(interval);
         }
     }, 16.6667);
