@@ -1,6 +1,6 @@
 import {ClassTypes, StorageKeys} from "@/constants";
 import { MessagesTypes } from "@/constants";
-import { GetStorageValue } from "@/functions";
+import {GetStorageValue, SetStorageValue} from "@/functions";
 
 console.log('True Ignore активирован!');
 
@@ -75,25 +75,6 @@ async function HideDiscussions() {
     }
 }
 
-// Сбор инфы о том кто заблокирован
-async function CollectIgnoredUsers() {
-    let secsToTry = 10;
-    const intervalTimeInSec = 1;
-    const interval = setInterval(() => {
-        if (secsToTry <= 0) {
-            clearInterval(interval);
-        } else {
-            secsToTry -= intervalTimeInSec;
-        }
-        const table = document.getElementsByClassName('NotificationGrid')[0]
-        if (table) {
-            const ATags = table.getElementsByTagName('a');
-            console.log(ATags)
-            clearInterval(interval);
-        }
-    }, intervalTimeInSec * 1000)
-}
-
 // Удаление сообщений в дискуссиях
 async function HideMessagesInDiscussions() {
     let messagesFeed: Element = document.getElementsByClassName('PostStream')[0];
@@ -164,6 +145,28 @@ async function HideMessagesInDiscussions() {
 
         messagesCount = messagesFeed .childNodes.length;
     }
+}
+
+// Сбор инфы о том кто заблокирован
+async function CollectIgnoredUsers() {
+    let secsToTry = 10;
+    const intervalTimeInSec = 0.1666667;
+    const interval = setInterval(async () => {
+        if (secsToTry <= 0) {
+            clearInterval(interval);
+        } else {
+            secsToTry -= intervalTimeInSec;
+        }
+        const table = document.getElementsByClassName('NotificationGrid')[0]
+        if (table) {
+            const names: string[] = []
+            for (let aTag of table.getElementsByTagName('a')) {
+                names.push(aTag.innerText.replaceAll(' ', ''));
+            }
+            console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names));
+            clearInterval(interval);
+        }
+    }, intervalTimeInSec * 1000);
 }
 
 // Чтение сообщений c service_worker
