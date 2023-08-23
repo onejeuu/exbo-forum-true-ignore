@@ -14,7 +14,8 @@ module.exports = (env, {mode} = {}) => ({
         index: './src/index.ts',
         popup: './src/popup.ts',
         constants: './src/constants.ts',
-        functions: './src/functions.ts'
+        functions: './src/functions.ts',
+        // "sw-replacer": './src/sw-replacer.ts'
     },
     output: {
         publicPath: '/',
@@ -101,7 +102,6 @@ module.exports = (env, {mode} = {}) => ({
             patterns: [
                 './src/manifest.json',
                 './src/popup.css',
-                './src/fa-regular-400.woff2',
                 { from: './src/icons', to: 'icons' },
             ],
         }),

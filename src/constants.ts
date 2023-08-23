@@ -6,7 +6,8 @@ export const MessagesTypes = {
 
 export const StorageKeys = {
     HideDiscussions: "hideDiscussions",
-    HideMessages: 'hideMessages'
+    HideMessages: 'hideMessages',
+    IgnoredUsers: 'ignoredUsers'
 }
 
 export const SwitchTypes = {
