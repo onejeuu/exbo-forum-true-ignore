@@ -30,10 +30,6 @@ const init = async () => {
     const togglePostsId = 'toggle-posts';
     const togglePosts = document.getElementById(togglePostsId)! as HTMLInputElement;
 
-    if (await GetStorageValue(StorageKeys.HideDiscussions) === undefined) {
-        await SetStorageValue(StorageKeys.HideDiscussions, true);
-    }
-
     if (await GetStorageValue(StorageKeys.HideDiscussions) === true && togglePosts) {
         togglePosts.checked = true;
     }
@@ -52,10 +48,6 @@ const init = async () => {
     // Сообщения
     const toggleMessagesId = 'toggle-messages';
     const toggleMessages = document.getElementById(toggleMessagesId)! as HTMLInputElement;
-
-    if (await GetStorageValue(StorageKeys.HideMessages) === undefined) {
-        await SetStorageValue(StorageKeys.HideMessages, true);
-    }
 
     if (await GetStorageValue(StorageKeys.HideMessages) === true && toggleMessages) {
         toggleMessages.checked = true;

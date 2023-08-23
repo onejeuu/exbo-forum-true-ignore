@@ -1,4 +1,5 @@
-import { MessagesTypes } from "@/constants";
+import {MessagesTypes, StorageKeys} from "@/constants";
+import {GetStorageValue, SetStorageValue} from "@/functions";
 
 
 
@@ -24,3 +25,16 @@ chrome.tabs.onUpdated.addListener(
         }
     }
 )
+
+chrome.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === "install") {
+        if (await GetStorageValue(StorageKeys.HideDiscussions) === undefined) {
+            await SetStorageValue(StorageKeys.HideDiscussions, true);
+        }
+        if (await GetStorageValue(StorageKeys.HideMessages) === undefined) {
+            await SetStorageValue(StorageKeys.HideMessages, true);
+        }
+    } else if (details.reason === "update") {
+
+    }
+});
