@@ -15,7 +15,6 @@
   },
   "permissions": [
     "storage",
-    "activeTab",
     "tabs"
   ],
   "background": {
