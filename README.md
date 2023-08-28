@@ -19,4 +19,4 @@ build for "Google Chrome" browser:
 build for "Firefox" browser:
 <br>
 1) <strong>npm run buildFirefox</strong>
-2) check "build_firefox" folder
+2) check "build-firefox" folder
