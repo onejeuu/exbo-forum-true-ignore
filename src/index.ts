@@ -4,6 +4,8 @@ import {GetStorageValue, SetStorageValue} from "@/functions";
 
 console.log('True Ignore активирован!');
 
+
+
 // Удаление дискуссий
 async function HideDiscussions() {
     let feed: Element = document.getElementsByClassName('DiscussionList-discussions')[0];
@@ -74,6 +76,8 @@ async function HideDiscussions() {
         discussionCount = feed.childNodes.length;
     }
 }
+
+
 
 // Удаление сообщений в дискуссиях
 async function HideMessagesInDiscussions() {
@@ -147,6 +151,109 @@ async function HideMessagesInDiscussions() {
     }
 }
 
+
+
+// Скрытие уведомлений на сайте от игноров
+async function HideNotifications() {
+    if (await GetStorageValue(StorageKeys.HideNotifications) === false) {
+        console.log('Удаление уведомлений отключено.');
+        return;
+    }
+
+    const ignoredUsers: string[] = await GetStorageValue(StorageKeys.IgnoredUsers);
+    if (!ignoredUsers || ignoredUsers.length === 0) {
+        console.log("Не собран список игнорируемых пользователей.");
+        return;
+    }
+
+    const interval = setInterval(async () => {
+
+        const li_container = document.querySelector('.item-notifications');
+        if (li_container && !li_container.classList.contains(ClassTypes.HasEvent)) {
+            clearInterval(interval);
+            li_container.classList.add(ClassTypes.HasEvent);
+            li_container.addEventListener('click', async (event) => {
+                const dropdown = li_container.querySelector('.NotificationsDropdown');
+                const isOpen: boolean = !dropdown?.classList.contains('open');
+                if (dropdown && isOpen) {
+                    let content: Element;
+                    let notificationsCount: number = -1;
+                    let isCleaningNow: boolean = false;
+                    const interval = setInterval(() => {
+
+                        if (content === undefined || (content && content.classList.contains(ClassTypes.HasEvent))) {
+                            content = dropdown.querySelector('.NotificationList-content') as Element;
+                        } else {
+                            content.classList.add(ClassTypes.HasEvent);
+                            clearNotifications();
+
+                            const observer = new MutationObserver(mutationList =>
+                                mutationList
+                                    .filter(m => m.type === 'childList')
+                                    .forEach(m => {
+                                        m.addedNodes.forEach(() => {
+                                            if (isCleaningNow)
+                                                return;
+
+                                            isCleaningNow = true;
+                                            clearNotifications();
+                                            isCleaningNow = false;
+                                        });
+                                    }));
+                            observer.observe(content, {childList: true, subtree: false});
+
+                            clearInterval(interval);
+                        }
+
+                    }, 16.666667);
+
+                    function clearNotifications() {
+                        if (content.childNodes.length === notificationsCount)
+                            return;
+
+                        console.log("Поиск непотребных уведомлений...");
+                        const groups = content.getElementsByClassName('NotificationGroup');
+                        content.querySelector('.hiddenHighElem')?.remove();
+                        for (let group of groups) {
+                            const users = group.querySelector('.NotificationGroup-content');
+                            const LIs = users?.getElementsByTagName('li');
+                            if (users && LIs) {
+                                for (let li of LIs) {
+                                    const username = li?.querySelector('.username')?.innerHTML as string;
+                                    if (!li.classList.contains(ClassTypes.HideElement)
+                                        && ignoredUsers.includes(username)) {
+                                        console.log(`Удалено уведомление от ${username}`);
+                                        li.classList.add(ClassTypes.HideElement)
+                                        li.style.display = 'none';
+                                    }
+                                }
+                            }
+                        }
+
+                        const contentHeight = content.getBoundingClientRect().height;
+                        const maxContentHeightInPx = (document.documentElement.clientHeight * 0.7);
+                        if (contentHeight < maxContentHeightInPx) {
+                            const hiddenHighElem = document.createElement('div');
+                            hiddenHighElem.classList.add('hiddenHighElem');
+                            hiddenHighElem.style.height = `${maxContentHeightInPx - contentHeight}px`;
+                            hiddenHighElem.style.opacity = '0';
+                            const lastGroup = groups.item(groups.length - 1);
+                            lastGroup?.after(hiddenHighElem);
+                        }
+
+                        notificationsCount = content.childNodes.length;
+                    }
+                }
+            });
+        }
+
+    }, 16.6666667)
+
+}
+//
+
+
+
 // Сбор инфы о том кто заблокирован
 async function CollectIgnoredUsers() {
     let secsToTry = 10;
@@ -163,26 +270,32 @@ async function CollectIgnoredUsers() {
             for (let aTag of table.getElementsByTagName('a')) {
                 names.push(aTag.innerText.replaceAll(' ', ''));
             }
-            console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names));
             clearInterval(interval);
+            console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names));
+            window.alert("Список игнорируемых пользователей собран.\nТеперь удаление уведомлений будет работать корректно.");
         }
     }, intervalTimeInSec * 1000);
 }
 
+
+
 // Чтение сообщений c service_worker
 chrome.runtime.onMessage.addListener(async (message: string, sender, sendResponse) => {
     const response = {result: true, error: ''};
+
+    HideNotifications(); // future content
+
     switch (message) {
         case MessagesTypes.DeleteDiscussionsSubscribe: {
             await HideDiscussions();
             break;
         }
         case MessagesTypes.DeleteMessagesInDiscussions: {
-            await HideMessagesInDiscussions(); // как доделаю
+            await HideMessagesInDiscussions();
             break;
         }
         case MessagesTypes.CollectIgnoredUsers: {
-            await CollectIgnoredUsers();
+            await CollectIgnoredUsers(); // future content
             break;
         }
         default: {

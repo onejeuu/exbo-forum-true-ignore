@@ -19,6 +19,10 @@ async function SwitchValues(elemId: string, switchType: number) {
             await invertAndSync(StorageKeys.HideMessages)
             break;
         }
+        case SwitchTypes.HideNotifications: {
+            await invertAndSync(StorageKeys.HideNotifications)
+            break;
+        }
         default: {
             throw new Error("Incorrect switchType!");
         }
@@ -60,6 +64,25 @@ const init = async () => {
                 SwitchValues(toggleMessagesId, SwitchTypes.HideMessages);
             } else {
                 SwitchValues(toggleMessagesId, SwitchTypes.HideMessages);
+            }
+        });
+    }
+
+    // Уведомления
+    const toggleNotificationsId = 'toggle-notifications';
+    const toggleNotifications = document.getElementById(toggleNotificationsId)! as HTMLInputElement;
+
+    if (await GetStorageValue(StorageKeys.HideNotifications) === true && toggleNotifications) {
+        toggleNotifications.checked = true;
+    }
+
+    if (toggleNotifications) {
+        toggleNotifications.addEventListener('change', (event: Event) => {
+            const isChecked = (event.target as HTMLInputElement).checked;
+            if (isChecked) {
+                SwitchValues(toggleNotificationsId, SwitchTypes.HideNotifications);
+            } else {
+                SwitchValues(toggleNotificationsId, SwitchTypes.HideNotifications);
             }
         });
     }
