@@ -1,21 +1,23 @@
-export const MessagesTypes = {
-    DeleteDiscussionsSubscribe: "deleteDiscussionsSubscribe",
-    DeleteMessagesInDiscussions: "deleteMessagesInDiscussions",
-    CollectIgnoredUsers: "collectIgnoredUsers",
+export enum MessagesTypes {
+    DeleteDiscussionsSubscribe = "deleteDiscussionsSubscribe",
+    DeleteMessagesInDiscussions = "deleteMessagesInDiscussions",
+    CollectIgnoredUsers = "collectIgnoredUsers",
 }
 
-export const StorageKeys = {
-    HideDiscussions: "hideDiscussions",
-    HideMessages: 'hideMessages',
-    IgnoredUsers: 'ignoredUsers'
+export enum StorageKeys {
+    HideDiscussions = "hideDiscussions",
+    HideMessages = "hideMessages",
+    HideNotifications = "hideNotifications",
+    IgnoredUsers = "ignoredUsers",
 }
 
-export const SwitchTypes = {
-    HideDiscussions: 0,
-    HideMessages: 1,
+export enum SwitchTypes {
+    HideDiscussions = 0,
+    HideMessages = 1,
+    HideNotifications = 2,
 }
 
-export const ClassTypes = {
-    HasEvent: "hasEvent",
-    HideElement: "hideElement"
+export enum ClassTypes {
+    HasEvent = "hasEvent",
+    HideElement = "hideElement"
 }
