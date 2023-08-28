@@ -4,7 +4,9 @@
   "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=production"
+    "buildAll": "webpack --mode=production --env browser=chrome && webpack --mode=production --env browser=firefox",
+    "buildChrome": "webpack --mode=production --env browser=chrome",
+    "buildFirefox": "webpack --mode=production --env browser=firefox"
   },
   "repository": {
     "type": "git",

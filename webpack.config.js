@@ -15,12 +15,11 @@ module.exports = (env, {mode} = {}) => ({
         popup: './src/popup.ts',
         constants: './src/constants.ts',
         functions: './src/functions.ts',
-        // "sw-replacer": './src/sw-replacer.ts'
     },
     output: {
         publicPath: '/',
         filename: '[name].js',
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, env.browser === 'firefox' ? 'build-firefox' : 'build'),
     },
     stats: {
         all: false,
@@ -84,11 +83,6 @@ module.exports = (env, {mode} = {}) => ({
         extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
-        // new HtmlWebpackPlugin({
-        //     template: './src/devtool.html',
-        //     filename: 'devtool.html',
-        //     chunks: ['devtool'],
-        // }),
         new HtmlWebpackPlugin({
             template: './src/popup.html',
             filename: 'popup.html',
@@ -100,7 +94,7 @@ module.exports = (env, {mode} = {}) => ({
         // }),
         new CopyWebpackPlugin({
             patterns: [
-                './src/manifest.json',
+                { from: env.browser === 'firefox' ? './src/firefox-manifest.json' : './src/chrome-manifest.json', to: 'manifest.json'},
                 './src/popup.css',
                 { from: './src/icons', to: 'icons' },
             ],
