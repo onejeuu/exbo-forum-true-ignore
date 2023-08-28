@@ -1,8 +1,16 @@
 {
   "name": "True Ignore (for EXBO Forum)",
   "description": "Теперь игнорируемые пользователи точно будут скрыты от ваших глаз!",
-  "version": "0.5",
+  "version": "0.6",
   "manifest_version": 3,
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "116.0"
+    },
+    "gecko_android": {
+      "strict_min_version": "116.0"
+    }
+  },
   "icons": {
     "16": "icons/16.png",
     "32": "icons/32.png",
@@ -13,12 +21,15 @@
     "default_popup": "popup.html",
     "default_title": "True Ignore"
   },
+  "host_permissions": [
+    "https://forum.exbo.net/*"
+  ],
   "permissions": [
     "storage",
     "tabs"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
