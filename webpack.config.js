@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires */
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -94,7 +95,7 @@ module.exports = (env, {mode} = {}) => ({
         // }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: env.browser === 'firefox' ? './src/firefox-manifest.json' : './src/chrome-manifest.json', to: 'manifest.json'},
+                { from: env.browser === 'firefox' ? FirefoxManifest() : './src/chrome-manifest.json', to: 'manifest.json'},
                 './src/popup.css',
                 { from: './src/icons', to: 'icons' },
             ],
@@ -106,3 +107,26 @@ module.exports = (env, {mode} = {}) => ({
     watch: mode === 'development',
     devtool: mode === 'development' ? 'inline-source-map' : 'source-map',
 });
+
+function FirefoxManifest() {
+    require('dotenv').config();
+    const AMO_ID = process.env.AMO_ID;
+    const srcManifestPath = './src/firefox-manifest.json';
+    const tempManifestPath = './temp/firefox-manifest.json';
+    if (fs.existsSync('./temp') === false) {
+        fs.mkdirSync('./temp')
+    }
+
+    if (AMO_ID) {
+        if (fs.existsSync(tempManifestPath))
+            fs.rmSync(tempManifestPath);
+
+        const srcManifest = JSON.parse(fs.readFileSync(srcManifestPath).toString());
+        srcManifest.browser_specific_settings.gecko.id = AMO_ID;
+        srcManifest.browser_specific_settings.gecko_android.id = AMO_ID;
+        fs.writeFileSync(tempManifestPath, JSON.stringify(srcManifest, null, 2));
+        return tempManifestPath;
+    } else {
+        return srcManifestPath;
+    }
+}
