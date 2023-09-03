@@ -4,7 +4,7 @@ import {GetStorageValue, SetStorageValue} from "@/functions";
 
 console.log('True Ignore активирован!');
 
-
+const tickrate: number = 16.66666667;
 
 // Удаление дискуссий
 async function HideDiscussions() {
@@ -39,7 +39,7 @@ async function HideDiscussions() {
             }
             clearInterval(interval);
         }
-    }, 16.6667);
+    }, tickrate);
 
     function hideIgnoredDiscussions() {
         if (feed.childNodes.length === discussionCount)
@@ -112,7 +112,7 @@ async function HideMessagesInDiscussions() {
             }
             clearInterval(interval);
         }
-    }, 16.6667);
+    }, tickrate);
 
     function hideMessages() {
         if (messagesFeed.childNodes.length === messagesCount)
@@ -205,7 +205,7 @@ async function HideNotifications() {
                             clearInterval(interval);
                         }
 
-                    }, 16.666667);
+                    }, tickrate);
 
                     function clearNotifications() {
                         if (content.childNodes.length === notificationsCount)
@@ -247,22 +247,20 @@ async function HideNotifications() {
             });
         }
 
-    }, 16.6666667)
+    }, tickrate)
 
 }
-//
 
 
 
 // Сбор инфы о том кто заблокирован
 async function CollectIgnoredUsers() {
     let secsToTry = 10;
-    const intervalTimeInSec = 0.1666667;
     const interval = setInterval(async () => {
         if (secsToTry <= 0) {
             clearInterval(interval);
         } else {
-            secsToTry -= intervalTimeInSec;
+            secsToTry -= (tickrate / 1000);
         }
         const table = document.getElementsByClassName('NotificationGrid')[0]
         if (table) {
@@ -274,7 +272,7 @@ async function CollectIgnoredUsers() {
             console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names));
             window.alert("Список игнорируемых пользователей собран.\nТеперь удаление уведомлений будет работать корректно.");
         }
-    }, intervalTimeInSec * 1000);
+    }, tickrate);
 }
 
 
@@ -283,27 +281,29 @@ async function CollectIgnoredUsers() {
 chrome.runtime.onMessage.addListener(async (message: string, sender, sendResponse) => {
     const response = {result: true, error: ''};
 
-    HideNotifications(); // future content
+    setTimeout(async () => {
+        HideNotifications();
 
-    switch (message) {
-        case MessagesTypes.DeleteDiscussionsSubscribe: {
-            await HideDiscussions();
-            break;
+        switch (message) {
+            case MessagesTypes.DeleteDiscussionsSubscribe: {
+                await HideDiscussions();
+                break;
+            }
+            case MessagesTypes.DeleteMessagesInDiscussions: {
+                await HideMessagesInDiscussions();
+                break;
+            }
+            case MessagesTypes.CollectIgnoredUsers: {
+                await CollectIgnoredUsers(); // future content
+                break;
+            }
+            default: {
+                response.result = false;
+                response.error = 'Incorrect message type';
+                throw new Error('Incorrect message type');
+            }
         }
-        case MessagesTypes.DeleteMessagesInDiscussions: {
-            await HideMessagesInDiscussions();
-            break;
-        }
-        case MessagesTypes.CollectIgnoredUsers: {
-            await CollectIgnoredUsers(); // future content
-            break;
-        }
-        default: {
-            response.result = false;
-            response.error = 'Incorrect message type';
-            throw new Error('Incorrect message type');
-        }
-    }
 
-    await sendResponse(response);
+        await sendResponse(response);
+    }, tickrate)
 });
