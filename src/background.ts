@@ -3,7 +3,7 @@ import {GetStorageValue, SetStorageValue} from "@/functions";
 
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
-        if (changeInfo.status === 'complete') {
+        if (changeInfo.status === 'complete' && tab.url?.includes('forum.exbo.net')) {
             console.log(tab.url)
             if (tab.url === 'https://forum.exbo.net/') {
                 chrome.tabs.sendMessage(tabId, MessagesTypes.DeleteDiscussionsSubscribe, (response) => {
