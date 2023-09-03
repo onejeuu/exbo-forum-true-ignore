@@ -42,8 +42,9 @@ async function HideDiscussions() {
     }, tickrate);
 
     function hideIgnoredDiscussions() {
-        if (feed.childNodes.length === discussionCount)
-            return;
+        // if (feed.childNodes.length === discussionCount)
+        //     return;
+        // Тут пока баг, если вернуть то жопа
 
         const dataIdsToDelete: string[] = [];
 
@@ -115,9 +116,9 @@ async function HideMessagesInDiscussions() {
     }, tickrate);
 
     function hideMessages() {
-        if (messagesFeed.childNodes.length === messagesCount)
-            return;
-
+        // if (messagesFeed.childNodes.length === messagesCount)
+        //     return;
+        // Тута пока баг, если вернуть то жопа
 
         const dataIdsToDelete: string[] = [];
 
@@ -278,6 +279,7 @@ async function CollectIgnoredUsers() {
 
 
 // Чтение сообщений c service_worker
+
 chrome.runtime.onMessage.addListener(async (message: string, sender, sendResponse) => {
     const response = {result: true, error: ''};
 
