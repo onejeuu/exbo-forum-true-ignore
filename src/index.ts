@@ -1,5 +1,4 @@
-import {ClassTypes, StorageKeys} from "@/constants";
-import { MessagesTypes } from "@/constants";
+import {ClassTypes, MessagesTypes, StorageKeys} from "@/constants";
 import {GetStorageValue, SetStorageValue} from "@/functions";
 
 console.log('True Ignore активирован!');
@@ -60,7 +59,7 @@ async function HideDiscussions() {
         dataIdsToDelete.forEach((dataId: string) => {
             const elem = document.querySelector(`[data-id="${dataId}"]`);
             if (elem && !elem.classList.contains(ClassTypes.HideElement))
-            elemsToHide.push(elem as HTMLLIElement);
+                elemsToHide.push(elem as HTMLLIElement);
         });
 
         if (elemsToHide.length > 0) {
@@ -77,7 +76,6 @@ async function HideDiscussions() {
         discussionCount = feed.childNodes.length;
     }
 }
-
 
 
 // Удаление сообщений в дискуссиях
@@ -125,6 +123,9 @@ async function HideMessagesInDiscussions() {
         console.log('Поиск непотребных сообщений...');
         messagesFeed.childNodes.forEach((div) => {
             const _div: HTMLDivElement = div as HTMLDivElement;
+            if (GetExtensionUserNickname() === GetMessageCreatorNickname(_div))
+                return;
+
             if (_div.getElementsByClassName('Post--hidden')[0] && _div.dataset?.id) {
                 dataIdsToDelete.push(_div.dataset.id);
             }
@@ -133,6 +134,7 @@ async function HideMessagesInDiscussions() {
         const elemsToHide: HTMLDivElement[] = [];
         dataIdsToDelete.forEach((dataId: string) => {
             const elem = document.querySelector(`[data-id="${dataId}"]`);
+
             if (elem && !elem.classList.contains(ClassTypes.HideElement))
                 elemsToHide.push(elem as HTMLDivElement);
         });
@@ -148,8 +150,22 @@ async function HideMessagesInDiscussions() {
             console.log('Непотребные сообщения удалены!');
         }
 
-        messagesCount = messagesFeed .childNodes.length;
+        messagesCount = messagesFeed.childNodes.length;
     }
+}
+
+// Получить ник сообщения в дискуссии
+function GetMessageCreatorNickname(div: HTMLDivElement): string {
+    const postUserDiv = div.querySelector('.PostUser'),
+        a = postUserDiv?.getElementsByTagName('a')[0],
+        nickname: string = (a?.href || '/u/').split('/u/')[1];
+
+    return nickname;
+}
+
+// Получить ник пользователя расширения
+function GetExtensionUserNickname(): string {
+    return document.querySelector('.username')?.textContent || '';
 }
 
 
@@ -253,7 +269,6 @@ async function HideNotifications() {
 }
 
 
-
 // Сбор инфы о том кто заблокирован
 async function CollectIgnoredUsers() {
     let secsToTry = 10;
@@ -275,7 +290,6 @@ async function CollectIgnoredUsers() {
         }
     }, tickrate);
 }
-
 
 
 // Чтение сообщений c service_worker
