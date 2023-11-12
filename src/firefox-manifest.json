@@ -1,7 +1,7 @@
 {
   "name": "True Ignore (for EXBO Forum)",
   "description": "Теперь игнорируемые пользователи точно будут скрыты от ваших глаз!",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
@@ -29,12 +29,14 @@
     "tabs"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
-      "all_frames" : false,
-      "run_at" : "document_end",
+      "all_frames": false,
+      "run_at": "document_end",
       "js": [
         "index.js"
       ],
