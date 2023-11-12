@@ -1,4 +1,4 @@
-import { StorageKeys, SwitchTypes } from "@/constants";
+import {StorageKeys, SwitchTypes} from "@/constants";
 import {GetStorageValue, SetStorageValue} from "@/functions";
 
 async function SwitchValues(elemId: string, switchType: number) {
