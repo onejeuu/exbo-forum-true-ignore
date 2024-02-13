@@ -232,6 +232,7 @@ async function HideNotifications() {
                         const groups = content.getElementsByClassName('NotificationGroup');
                         content.querySelector('.hiddenHighElem')?.remove();
                         for (let group of groups) {
+                            console.log(group)
                             const badges = group.querySelector('.NotificationGroup-badges');
                             const badgesLIs = badges?.querySelectorAll('li');
                             if (badgesLIs) {
@@ -264,14 +265,24 @@ async function HideNotifications() {
                             const users = group.querySelector('.NotificationGroup-content');
                             const LIs = users?.getElementsByTagName('li');
                             if (users && LIs) {
+                                let hiddenNotificationsCount: number = 0;
                                 for (let li of LIs) {
                                     const username = li?.querySelector('.username')?.innerHTML as string;
-                                    if (!li.classList.contains(ClassTypes.HideElement)
-                                        && ignoredUsers.includes(username)) {
+                                    if (
+                                        !li.classList.contains(ClassTypes.HideElement)
+                                        && ignoredUsers.includes(username)
+                                    ) {
+                                        hiddenNotificationsCount += 1;
                                         console.log(`Удалено уведомление от ${username}`);
                                         li.classList.add(ClassTypes.HideElement)
                                         li.style.display = 'none';
                                     }
+                                }
+
+                                if (LIs.length === hiddenNotificationsCount) {
+                                    group.classList.add(ClassTypes.HideElement)
+                                    // @ts-ignore
+                                    group.style.display = 'none';
                                 }
                             }
                         }
