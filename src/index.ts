@@ -232,6 +232,35 @@ async function HideNotifications() {
                         const groups = content.getElementsByClassName('NotificationGroup');
                         content.querySelector('.hiddenHighElem')?.remove();
                         for (let group of groups) {
+                            const badges = group.querySelector('.NotificationGroup-badges');
+                            const badgesLIs = badges?.querySelectorAll('li');
+                            if (badgesLIs) {
+                                let deleteConfirmed: boolean = false;
+                                let isPrivate: boolean = false;
+                                let userIgnored: boolean = false;
+                                for (let badgesLI of badgesLIs) {
+                                    if (badgesLI.classList.contains('item-user-discussion-ignored')) {
+                                        userIgnored = true;
+                                    }
+                                    if (badgesLI.classList.contains('item-private')) {
+                                        isPrivate = true;
+                                    }
+                                }
+
+                                if (isPrivate && userIgnored) {
+                                    deleteConfirmed = true;
+                                    console.log(`Удалено уведомление от переписки с заблокированным пользователем`);
+                                    group.classList.add(ClassTypes.HideElement)
+                                    // @ts-ignore
+                                    group.style.display = 'none';
+                                    break;
+                                }
+
+                                if (deleteConfirmed) {
+                                    continue;
+                                }
+                            }
+
                             const users = group.querySelector('.NotificationGroup-content');
                             const LIs = users?.getElementsByTagName('li');
                             if (users && LIs) {
