@@ -29,3 +29,19 @@ export function ToggleStorageValue(key: string): Promise<void> {
         })
     })
 }
+
+export function SetDefaultStorageValue(key: string, newValue: any): Promise<void> {
+    return new Promise((resolve) => {
+        chrome.storage.local.get(key, (result) => {
+            const currentValue = result[key]
+
+            if (currentValue === undefined) {
+                const data = { [key]: newValue }
+
+                chrome.storage.local.set(data, () => {
+                    resolve()
+                })
+            }
+        })
+    })
+}

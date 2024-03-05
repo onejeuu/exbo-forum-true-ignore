@@ -1,6 +1,6 @@
 {
     "name": "exbo-forum-true-ignore-dev",
-    "version": "0.7.0-dev.1",
+    "version": "0.7.0-dev.2",
     "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
     "main": "index.js",
     "scripts": {

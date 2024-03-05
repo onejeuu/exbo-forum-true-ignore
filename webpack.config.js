@@ -11,7 +11,7 @@ const ZipPlugin = require("zip-webpack-plugin")
 module.exports = (env, { mode } = {}) => ({
     mode,
     entry: {
-        background: "./src/background.ts",
+        background: "./src/background/index.ts",
         index: "./src/index.ts",
         popup: "./src/popup.ts",
         constants: "./src/constants.ts",
