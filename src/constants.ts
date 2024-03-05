@@ -15,3 +15,5 @@ export enum ClassTypes {
     HasEvent = "hasEvent",
     HideElement = "hideElement",
 }
+
+export const intervalTickrate: number = 16.66666667
