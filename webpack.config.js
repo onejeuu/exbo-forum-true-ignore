@@ -12,8 +12,8 @@ module.exports = (env, { mode } = {}) => ({
     mode,
     entry: {
         background: "./src/background/index.ts",
-        index: "./src/index.ts",
-        popup: "./src/popup.ts",
+        content: "./src/content/index.ts",
+        popup: "./src/popup/popup.ts",
         constants: "./src/constants.ts",
         storage: "./src/storage.ts",
     },
@@ -85,7 +85,7 @@ module.exports = (env, { mode } = {}) => ({
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/popup.html",
+            template: "./src/popup/popup.html",
             filename: "popup.html",
             chunks: ["popup"],
         }),
@@ -96,11 +96,11 @@ module.exports = (env, { mode } = {}) => ({
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: env.browser === "firefox" ? FirefoxManifest() : "./src/manifest/chrome.json",
+                    from: env.browser === "firefox" ? FirefoxManifest() : "./public/manifest/chrome.json",
                     to: "manifest.json",
                 },
-                "./src/popup.css",
-                { from: "./src/icons", to: "icons" },
+                "./src/popup/popup.css",
+                { from: "./public/icons", to: "icons" },
             ],
         }),
         ...(mode === "production"
@@ -118,7 +118,7 @@ function FirefoxManifest() {
     require("dotenv").config()
 
     const AMO_ID = process.env.AMO_ID
-    const srcManifestPath = "./src/manifest/firefox.json"
+    const srcManifestPath = "./public/manifest/firefox.json"
     const tempManifestPath = "./temp/manifest.json"
 
     if (fs.existsSync("./temp") === false) {

@@ -1,8 +1,8 @@
 {
     "name": "exbo-forum-true-ignore-dev",
-    "version": "0.7.0-dev.2",
+    "version": "0.7.0-dev.3",
     "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
-    "main": "index.js",
+    "main": "content.js",
     "scripts": {
         "build": "npm run buildChrome && npm run buildFirefox",
         "buildChrome": "webpack --mode=production --env browser=chrome",

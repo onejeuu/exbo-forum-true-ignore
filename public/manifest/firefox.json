@@ -29,7 +29,7 @@
         {
             "all_frames": false,
             "run_at": "document_end",
-            "js": ["index.js"],
+            "js": ["content.js"],
             "matches": ["https://forum.exbo.net/*"]
         }
     ]
