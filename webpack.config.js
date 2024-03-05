@@ -96,7 +96,7 @@ module.exports = (env, { mode } = {}) => ({
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: env.browser === "firefox" ? FirefoxManifest() : "./src/chrome-manifest.json",
+                    from: env.browser === "firefox" ? FirefoxManifest() : "./src/manifest/chrome.json",
                     to: "manifest.json",
                 },
                 "./src/popup.css",
@@ -118,8 +118,8 @@ function FirefoxManifest() {
     require("dotenv").config()
 
     const AMO_ID = process.env.AMO_ID
-    const srcManifestPath = "./src/firefox-manifest.json"
-    const tempManifestPath = "./temp/firefox-manifest.json"
+    const srcManifestPath = "./src/manifest/firefox.json"
+    const tempManifestPath = "./temp/manifest.json"
 
     if (fs.existsSync("./temp") === false) {
         fs.mkdirSync("./temp")
