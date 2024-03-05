@@ -1,365 +1,359 @@
-import {ClassTypes, MessagesTypes, StorageKeys} from "@/constants";
-import {GetStorageValue, SetStorageValue} from "@/functions";
+import { ClassTypes, MessagesTypes, StorageKeys } from "@/constants"
+import { GetStorageValue, SetStorageValue } from "@/storage"
 
-console.log('True Ignore активирован!');
+console.log("True Ignore активирован!")
 
-const tickrate: number = 16.66666667;
+const tickrate: number = 16.66666667
 
 // Удаление дискуссий
 async function HideDiscussions() {
-    let feed: Element = document.getElementsByClassName('DiscussionList-discussions')[0];
-    let discussionCount: number = -1;
-    let isCleaningNow: boolean = false;
+    let feed: Element = document.getElementsByClassName("DiscussionList-discussions")[0]
+    let discussionCount: number = -1
+    let isCleaningNow: boolean = false
 
     const interval = setInterval(async () => {
         if (feed === undefined || (feed && feed.classList.contains(ClassTypes.HasEvent))) {
-            feed = document.getElementsByClassName('DiscussionList-discussions')[0];
+            feed = document.getElementsByClassName("DiscussionList-discussions")[0]
         } else {
             feed.classList.add(ClassTypes.HasEvent)
-            const result: boolean = await GetStorageValue(StorageKeys.HideDiscussions);
+            const result: boolean = await GetStorageValue(StorageKeys.HideDiscussions)
             if (result) {
-                hideIgnoredDiscussions();
-                const observer = new MutationObserver(mutationList =>
+                hideIgnoredDiscussions()
+                const observer = new MutationObserver((mutationList) =>
                     mutationList
-                        .filter(m => m.type === 'childList')
-                        .forEach(m => {
+                        .filter((m) => m.type === "childList")
+                        .forEach((m) => {
                             m.addedNodes.forEach(() => {
-                                if (isCleaningNow)
-                                    return;
+                                if (isCleaningNow) return
 
-                                isCleaningNow = true;
-                                hideIgnoredDiscussions();
-                                isCleaningNow = false;
-                            });
-                        }));
-                observer.observe(feed, {childList: true, subtree: true});
+                                isCleaningNow = true
+                                hideIgnoredDiscussions()
+                                isCleaningNow = false
+                            })
+                        })
+                )
+                observer.observe(feed, { childList: true, subtree: true })
             } else {
-                console.log('Удаление дискуссий выключено.')
+                console.log("Удаление дискуссий выключено.")
             }
-            clearInterval(interval);
+            clearInterval(interval)
         }
-    }, tickrate);
+    }, tickrate)
 
     function hideIgnoredDiscussions() {
         // if (feed.childNodes.length === discussionCount)
         //     return;
         // Тут пока баг, если вернуть то жопа
 
-        const dataIdsToDelete: string[] = [];
+        const dataIdsToDelete: string[] = []
 
-        console.log('Поиск непотребных дискуссий...');
+        console.log("Поиск непотребных дискуссий...")
         feed.childNodes.forEach((li) => {
-            const _li: HTMLLIElement = li as HTMLLIElement;
-            if (_li.getElementsByClassName('item-user-discussion-ignored')[0] && _li.dataset?.id) {
-                dataIdsToDelete.push(_li.dataset.id);
+            const _li: HTMLLIElement = li as HTMLLIElement
+            if (_li.getElementsByClassName("item-user-discussion-ignored")[0] && _li.dataset?.id) {
+                dataIdsToDelete.push(_li.dataset.id)
             }
-        });
+        })
 
-        const elemsToHide: HTMLLIElement[] = [];
+        const elemsToHide: HTMLLIElement[] = []
         dataIdsToDelete.forEach((dataId: string) => {
-            const elem = document.querySelector(`[data-id="${dataId}"]`);
-            if (elem && !elem.classList.contains(ClassTypes.HideElement))
-                elemsToHide.push(elem as HTMLLIElement);
-        });
+            const elem = document.querySelector(`[data-id="${dataId}"]`)
+            if (elem && !elem.classList.contains(ClassTypes.HideElement)) elemsToHide.push(elem as HTMLLIElement)
+        })
 
         if (elemsToHide.length > 0) {
-            console.log('Удаление непотребных дискуссий...');
+            console.log("Удаление непотребных дискуссий...")
 
             elemsToHide.forEach((elem) => {
-                elem.style.display = 'none';
-                elem.classList.add(ClassTypes.HideElement);
-            });
+                elem.style.display = "none"
+                elem.classList.add(ClassTypes.HideElement)
+            })
 
-            console.log('Непотребные дискуссии удалены!');
+            console.log("Непотребные дискуссии удалены!")
         }
 
-        discussionCount = feed.childNodes.length;
+        discussionCount = feed.childNodes.length
     }
 }
 
-
 // Удаление сообщений в дискуссиях
 async function HideMessagesInDiscussions() {
-    let messagesFeed: Element = document.getElementsByClassName('PostStream')[0];
-    let messagesCount: number = -1;
-    let isCleaningNow: boolean = false;
+    let messagesFeed: Element = document.getElementsByClassName("PostStream")[0]
+    let messagesCount: number = -1
+    let isCleaningNow: boolean = false
 
     const interval = setInterval(async () => {
         if (messagesFeed === undefined || (messagesFeed && messagesFeed.classList.contains(ClassTypes.HasEvent))) {
-            messagesFeed = document.getElementsByClassName('PostStream')[0];
+            messagesFeed = document.getElementsByClassName("PostStream")[0]
         } else {
-            messagesFeed.classList.add(ClassTypes.HasEvent);
-            const result: boolean = await GetStorageValue(StorageKeys.HideMessages);
+            messagesFeed.classList.add(ClassTypes.HasEvent)
+            const result: boolean = await GetStorageValue(StorageKeys.HideMessages)
             if (result) {
-                hideMessages();
-                const observer = new MutationObserver(mutationList =>
+                hideMessages()
+                const observer = new MutationObserver((mutationList) =>
                     mutationList
-                        .filter(m => m.type === 'childList')
-                        .forEach(m => {
+                        .filter((m) => m.type === "childList")
+                        .forEach((m) => {
                             m.addedNodes.forEach(() => {
-                                if (isCleaningNow)
-                                    return;
+                                if (isCleaningNow) return
 
-                                isCleaningNow = true;
-                                hideMessages();
-                                isCleaningNow = false;
-                            });
-                        }));
-                observer.observe(messagesFeed, {childList: true, subtree: true});
+                                isCleaningNow = true
+                                hideMessages()
+                                isCleaningNow = false
+                            })
+                        })
+                )
+                observer.observe(messagesFeed, {
+                    childList: true,
+                    subtree: true,
+                })
             } else {
-                console.log('Удаление сообщений выключено.')
+                console.log("Удаление сообщений выключено.")
             }
-            clearInterval(interval);
+            clearInterval(interval)
         }
-    }, tickrate);
+    }, tickrate)
 
     function hideMessages() {
         // if (messagesFeed.childNodes.length === messagesCount)
         //     return;
         // Тута пока баг, если вернуть то жопа
 
-        const dataIdsToDelete: string[] = [];
+        const dataIdsToDelete: string[] = []
 
-        console.log('Поиск непотребных сообщений...');
+        console.log("Поиск непотребных сообщений...")
         messagesFeed.childNodes.forEach((div) => {
-            const _div: HTMLDivElement = div as HTMLDivElement;
-            if (GetExtensionUserNickname() === GetMessageCreatorNickname(_div))
-                return;
+            const _div: HTMLDivElement = div as HTMLDivElement
+            if (GetExtensionUserNickname() === GetMessageCreatorNickname(_div)) return
 
-            if (_div.getElementsByClassName('Post--hidden')[0] && _div.dataset?.id) {
-                dataIdsToDelete.push(_div.dataset.id);
+            if (_div.getElementsByClassName("Post--hidden")[0] && _div.dataset?.id) {
+                dataIdsToDelete.push(_div.dataset.id)
             }
-        });
+        })
 
-        const elemsToHide: HTMLDivElement[] = [];
+        const elemsToHide: HTMLDivElement[] = []
         dataIdsToDelete.forEach((dataId: string) => {
-            const elem = document.querySelector(`[data-id="${dataId}"]`);
+            const elem = document.querySelector(`[data-id="${dataId}"]`)
 
-            if (elem && !elem.classList.contains(ClassTypes.HideElement))
-                elemsToHide.push(elem as HTMLDivElement);
-        });
+            if (elem && !elem.classList.contains(ClassTypes.HideElement)) elemsToHide.push(elem as HTMLDivElement)
+        })
 
         if (elemsToHide.length > 0) {
-            console.log('Удаление непотребных сообщений...');
+            console.log("Удаление непотребных сообщений...")
 
             elemsToHide.forEach((elem) => {
-                elem.style.display = 'none';
-                elem.classList.add(ClassTypes.HideElement);
-            });
+                elem.style.display = "none"
+                elem.classList.add(ClassTypes.HideElement)
+            })
 
-            console.log('Непотребные сообщения удалены!');
+            console.log("Непотребные сообщения удалены!")
         }
 
-        messagesCount = messagesFeed.childNodes.length;
+        messagesCount = messagesFeed.childNodes.length
     }
 }
 
 // Получить ник сообщения в дискуссии
 function GetMessageCreatorNickname(div: HTMLDivElement): string {
-    const postUserDiv = div.querySelector('.PostUser'),
-        a = postUserDiv?.getElementsByTagName('a')[0],
-        nickname: string = (a?.href || '/u/').split('/u/')[1];
+    const postUserDiv = div.querySelector(".PostUser"),
+        a = postUserDiv?.getElementsByTagName("a")[0],
+        nickname: string = (a?.href || "/u/").split("/u/")[1]
 
-    return nickname;
+    return nickname
 }
 
 // Получить ник пользователя расширения
 function GetExtensionUserNickname(): string {
-    return document.querySelector('.username')?.textContent || '';
+    return document.querySelector(".username")?.textContent || ""
 }
-
-
 
 // Скрытие уведомлений на сайте от игноров
 async function HideNotifications() {
-    if (await GetStorageValue(StorageKeys.HideNotifications) === false) {
-        console.log('Удаление уведомлений отключено.');
-        return;
+    if ((await GetStorageValue(StorageKeys.HideNotifications)) === false) {
+        console.log("Удаление уведомлений отключено.")
+        return
     }
 
-    const ignoredUsers: string[] = await GetStorageValue(StorageKeys.IgnoredUsers);
+    const ignoredUsers: string[] = await GetStorageValue(StorageKeys.IgnoredUsers)
     if (!ignoredUsers || ignoredUsers.length === 0) {
-        console.log("Не собран список игнорируемых пользователей.");
-        return;
+        console.log("Не собран список игнорируемых пользователей.")
+        return
     }
 
     const interval = setInterval(async () => {
-
-        const li_container = document.querySelector('.item-notifications');
+        const li_container = document.querySelector(".item-notifications")
         if (li_container && !li_container.classList.contains(ClassTypes.HasEvent)) {
-            clearInterval(interval);
-            li_container.classList.add(ClassTypes.HasEvent);
-            li_container.addEventListener('click', async (event) => {
-                const dropdown = li_container.querySelector('.NotificationsDropdown');
-                const isOpen: boolean = !dropdown?.classList.contains('open');
+            clearInterval(interval)
+            li_container.classList.add(ClassTypes.HasEvent)
+            li_container.addEventListener("click", async (event) => {
+                const dropdown = li_container.querySelector(".NotificationsDropdown")
+                const isOpen: boolean = !dropdown?.classList.contains("open")
                 if (dropdown && isOpen) {
-                    let content: Element;
-                    let notificationsCount: number = -1;
-                    let isCleaningNow: boolean = false;
+                    let content: Element
+                    let notificationsCount: number = -1
+                    let isCleaningNow: boolean = false
                     const interval = setInterval(() => {
-
                         if (content === undefined || (content && content.classList.contains(ClassTypes.HasEvent))) {
-                            content = dropdown.querySelector('.NotificationList-content') as Element;
+                            content = dropdown.querySelector(".NotificationList-content") as Element
                         } else {
-                            content.classList.add(ClassTypes.HasEvent);
-                            clearNotifications();
+                            content.classList.add(ClassTypes.HasEvent)
+                            clearNotifications()
 
-                            const observer = new MutationObserver(mutationList =>
+                            const observer = new MutationObserver((mutationList) =>
                                 mutationList
-                                    .filter(m => m.type === 'childList')
-                                    .forEach(m => {
+                                    .filter((m) => m.type === "childList")
+                                    .forEach((m) => {
                                         m.addedNodes.forEach(() => {
-                                            if (isCleaningNow)
-                                                return;
+                                            if (isCleaningNow) return
 
-                                            isCleaningNow = true;
-                                            clearNotifications();
-                                            isCleaningNow = false;
-                                        });
-                                    }));
-                            observer.observe(content, {childList: true, subtree: false});
+                                            isCleaningNow = true
+                                            clearNotifications()
+                                            isCleaningNow = false
+                                        })
+                                    })
+                            )
+                            observer.observe(content, {
+                                childList: true,
+                                subtree: false,
+                            })
 
-                            clearInterval(interval);
+                            clearInterval(interval)
                         }
-
-                    }, tickrate);
+                    }, tickrate)
 
                     function clearNotifications() {
-                        if (content.childNodes.length === notificationsCount)
-                            return;
+                        if (content.childNodes.length === notificationsCount) return
 
-                        console.log("Поиск непотребных уведомлений...");
-                        const groups = content.getElementsByClassName('NotificationGroup');
-                        content.querySelector('.hiddenHighElem')?.remove();
+                        console.log("Поиск непотребных уведомлений...")
+                        const groups = content.getElementsByClassName("NotificationGroup")
+                        content.querySelector(".hiddenHighElem")?.remove()
                         for (let group of groups) {
                             console.log(group)
-                            const badges = group.querySelector('.NotificationGroup-badges');
-                            const badgesLIs = badges?.querySelectorAll('li');
+                            const badges = group.querySelector(".NotificationGroup-badges")
+                            const badgesLIs = badges?.querySelectorAll("li")
                             if (badgesLIs) {
-                                let deleteConfirmed: boolean = false;
-                                let isPrivate: boolean = false;
-                                let userIgnored: boolean = false;
+                                let deleteConfirmed: boolean = false
+                                let isPrivate: boolean = false
+                                let userIgnored: boolean = false
                                 for (let badgesLI of badgesLIs) {
-                                    if (badgesLI.classList.contains('item-user-discussion-ignored')) {
-                                        userIgnored = true;
+                                    if (badgesLI.classList.contains("item-user-discussion-ignored")) {
+                                        userIgnored = true
                                     }
-                                    if (badgesLI.classList.contains('item-private')) {
-                                        isPrivate = true;
+                                    if (badgesLI.classList.contains("item-private")) {
+                                        isPrivate = true
                                     }
                                 }
 
                                 if (isPrivate && userIgnored) {
-                                    deleteConfirmed = true;
-                                    console.log(`Удалено уведомление от переписки с заблокированным пользователем`);
+                                    deleteConfirmed = true
+                                    console.log(`Удалено уведомление от переписки с заблокированным пользователем`)
                                     group.classList.add(ClassTypes.HideElement)
                                     // @ts-ignore
-                                    group.style.display = 'none';
-                                    break;
+                                    group.style.display = "none"
+                                    break
                                 }
 
                                 if (deleteConfirmed) {
-                                    continue;
+                                    continue
                                 }
                             }
 
-                            const users = group.querySelector('.NotificationGroup-content');
-                            const LIs = users?.getElementsByTagName('li');
+                            const users = group.querySelector(".NotificationGroup-content")
+                            const LIs = users?.getElementsByTagName("li")
                             if (users && LIs) {
-                                let hiddenNotificationsCount: number = 0;
+                                let hiddenNotificationsCount: number = 0
                                 for (let li of LIs) {
-                                    const username = li?.querySelector('.username')?.innerHTML as string;
+                                    const username = li?.querySelector(".username")?.innerHTML as string
                                     if (
-                                        !li.classList.contains(ClassTypes.HideElement)
-                                        && ignoredUsers.includes(username)
+                                        !li.classList.contains(ClassTypes.HideElement) &&
+                                        ignoredUsers.includes(username)
                                     ) {
-                                        hiddenNotificationsCount += 1;
-                                        console.log(`Удалено уведомление от ${username}`);
+                                        hiddenNotificationsCount += 1
+                                        console.log(`Удалено уведомление от ${username}`)
                                         li.classList.add(ClassTypes.HideElement)
-                                        li.style.display = 'none';
+                                        li.style.display = "none"
                                     }
                                 }
 
                                 if (LIs.length === hiddenNotificationsCount) {
                                     group.classList.add(ClassTypes.HideElement)
                                     // @ts-ignore
-                                    group.style.display = 'none';
+                                    group.style.display = "none"
                                 }
                             }
                         }
 
-                        const contentHeight = content.getBoundingClientRect().height;
-                        const maxContentHeightInPx = (document.documentElement.clientHeight * 0.7);
+                        const contentHeight = content.getBoundingClientRect().height
+                        const maxContentHeightInPx = document.documentElement.clientHeight * 0.7
                         if (contentHeight < maxContentHeightInPx) {
-                            const hiddenHighElem = document.createElement('div');
-                            hiddenHighElem.classList.add('hiddenHighElem');
-                            hiddenHighElem.style.height = `${maxContentHeightInPx - contentHeight}px`;
-                            hiddenHighElem.style.opacity = '0';
-                            const lastGroup = groups.item(groups.length - 1);
-                            lastGroup?.after(hiddenHighElem);
+                            const hiddenHighElem = document.createElement("div")
+                            hiddenHighElem.classList.add("hiddenHighElem")
+                            hiddenHighElem.style.height = `${maxContentHeightInPx - contentHeight}px`
+                            hiddenHighElem.style.opacity = "0"
+                            const lastGroup = groups.item(groups.length - 1)
+                            lastGroup?.after(hiddenHighElem)
                         }
 
-                        notificationsCount = content.childNodes.length;
+                        notificationsCount = content.childNodes.length
                     }
                 }
-            });
+            })
         }
-
     }, tickrate)
-
 }
-
 
 // Сбор инфы о том кто заблокирован
 async function CollectIgnoredUsers() {
-    let secsToTry = 10;
+    let secsToTry = 10
     const interval = setInterval(async () => {
         if (secsToTry <= 0) {
-            clearInterval(interval);
+            clearInterval(interval)
         } else {
-            secsToTry -= (tickrate / 1000);
+            secsToTry -= tickrate / 1000
         }
-        const table = document.getElementsByClassName('NotificationGrid')[0]
+        const table = document.getElementsByClassName("NotificationGrid")[0]
         if (table) {
             const names: string[] = []
-            for (let aTag of table.getElementsByTagName('a')) {
-                names.push(aTag.innerText.replaceAll(' ', ''));
+            for (let aTag of table.getElementsByTagName("a")) {
+                names.push(aTag.innerText.replaceAll(" ", ""))
             }
-            clearInterval(interval);
-            console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names));
-            window.alert("Список игнорируемых пользователей собран.\nТеперь удаление уведомлений будет работать корректно.");
+            clearInterval(interval)
+            console.log(await SetStorageValue(StorageKeys.IgnoredUsers, names))
+            window.alert(
+                "Список игнорируемых пользователей собран.\nТеперь удаление уведомлений будет работать корректно."
+            )
         }
-    }, tickrate);
+    }, tickrate)
 }
-
 
 // Чтение сообщений c service_worker
 
 chrome.runtime.onMessage.addListener(async (message: string, sender, sendResponse) => {
-    const response = {result: true, error: ''};
+    const response = { result: true, error: "" }
 
     setTimeout(async () => {
-        HideNotifications();
+        HideNotifications()
 
         switch (message) {
             case MessagesTypes.DeleteDiscussionsSubscribe: {
-                await HideDiscussions();
-                break;
+                await HideDiscussions()
+                break
             }
             case MessagesTypes.DeleteMessagesInDiscussions: {
-                await HideMessagesInDiscussions();
-                break;
+                await HideMessagesInDiscussions()
+                break
             }
             case MessagesTypes.CollectIgnoredUsers: {
-                await CollectIgnoredUsers(); // future content
-                break;
+                await CollectIgnoredUsers() // future content
+                break
             }
             default: {
-                response.result = false;
-                response.error = 'Incorrect message type';
-                throw new Error('Incorrect message type');
+                response.result = false
+                response.error = "Incorrect message type"
+                throw new Error("Incorrect message type")
             }
         }
 
-        await sendResponse(response);
+        sendResponse(response)
     }, tickrate)
-});
+})

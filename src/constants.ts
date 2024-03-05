@@ -11,13 +11,7 @@ export enum StorageKeys {
     IgnoredUsers = "ignoredUsers",
 }
 
-export enum SwitchTypes {
-    HideDiscussions = 0,
-    HideMessages = 1,
-    HideNotifications = 2,
-}
-
 export enum ClassTypes {
     HasEvent = "hasEvent",
-    HideElement = "hideElement"
+    HideElement = "hideElement",
 }

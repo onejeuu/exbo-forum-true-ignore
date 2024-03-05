@@ -1,7 +1,22 @@
-.idea
+# IDE settings
+.idea/
+.vscode/
+
+# Environment variables
 .env
-node_modules
-temp
-build
-build-firefox
-secret keys
+
+# List of tasks
+.todo
+
+# Node.js modules
+node_modules/
+
+# Temporary files
+temp/
+
+# General build artifacts
+build/
+
+# Firefox extension build artifacts
+build-firefox/
+

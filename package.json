@@ -1,43 +1,43 @@
 {
-  "name": "exbo-forum-true-ignore",
-  "version": "0.6.52",
-  "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
-  "main": "index.js",
-  "scripts": {
-    "buildAll": "npm run buildChrome && npm run buildFirefox",
-    "buildChrome": "webpack --mode=production --env browser=chrome",
-    "buildFirefox": "webpack --mode=production --env browser=firefox"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Stalcraft-Dev-Team/EXBO-Forum-True-Ignore.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Stalcraft-Dev-Team/EXBO-Forum-True-Ignore/issues"
-  },
-  "keywords": [
-    "stalcraft",
-    "exbo",
-    "forum"
-  ],
-  "author": "Nikita Bezrukov",
-  "license": "ISC",
-  "dependencies": {
-    "@types/chrome": "^0.0.243",
-    "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^11.0.0",
-    "dotenv": "^16.3.1",
-    "git-revision-webpack-plugin": "^5.0.0",
-    "html-webpack-plugin": "^5.5.3",
-    "mini-css-extract-plugin": "^2.7.6",
-    "postcss-loader": "^7.3.3",
-    "postcss-nesting": "^12.0.1",
-    "ts-loader": "^9.4.4",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "zip-webpack-plugin": "^4.0.1"
-  },
-  "devDependencies": {
-    "typescript": "^5.1.6"
-  }
+    "name": "exbo-forum-true-ignore-dev",
+    "version": "0.7.0-dev.1",
+    "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
+    "main": "index.js",
+    "scripts": {
+        "buildAll": "npm run buildChrome && npm run buildFirefox",
+        "buildChrome": "webpack --mode=production --env browser=chrome",
+        "buildFirefox": "webpack --mode=production --env browser=firefox"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/onejeuu/exbo-forum-true-ignore"
+    },
+    "bugs": {
+        "url": "https://github.com/onejeuu/exbo-forum-true-ignore/issues"
+    },
+    "keywords": [
+        "stalcraft",
+        "exbo",
+        "forum"
+    ],
+    "author": "Nikita Bezrukov",
+    "license": "ISC",
+    "dependencies": {
+        "clean-webpack-plugin": "^4.0.0",
+        "copy-webpack-plugin": "^11.0.0",
+        "dotenv": "^16.3.1",
+        "git-revision-webpack-plugin": "^5.0.0",
+        "html-webpack-plugin": "^5.5.3",
+        "mini-css-extract-plugin": "^2.7.6",
+        "postcss-loader": "^7.3.3",
+        "postcss-nesting": "^12.0.1",
+        "ts-loader": "^9.4.4",
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.1.4",
+        "zip-webpack-plugin": "^4.0.1"
+    },
+    "devDependencies": {
+        "@types/chrome": "^0.0.262",
+        "typescript": "^5.1.6"
+    }
 }
