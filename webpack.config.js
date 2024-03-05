@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+
 const ZipPlugin = require("zip-webpack-plugin")
 
 module.exports = (env, { mode } = {}) => ({
@@ -115,9 +116,11 @@ module.exports = (env, { mode } = {}) => ({
 
 function FirefoxManifest() {
     require("dotenv").config()
+
     const AMO_ID = process.env.AMO_ID
     const srcManifestPath = "./src/firefox-manifest.json"
     const tempManifestPath = "./temp/firefox-manifest.json"
+
     if (fs.existsSync("./temp") === false) {
         fs.mkdirSync("./temp")
     }
