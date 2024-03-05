@@ -4,7 +4,7 @@
     "description": "Теперь игнорируемые пользователи точно не будут мозолить ваши глаза!",
     "main": "index.js",
     "scripts": {
-        "buildAll": "npm run buildChrome && npm run buildFirefox",
+        "build": "npm run buildChrome && npm run buildFirefox",
         "buildChrome": "webpack --mode=production --env browser=chrome",
         "buildFirefox": "webpack --mode=production --env browser=firefox"
     },

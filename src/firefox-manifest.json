@@ -1,48 +1,36 @@
 {
-  "name": "True Ignore (for EXBO Forum)",
-  "description": "Теперь игнорируемые пользователи точно будут скрыты от ваших глаз!",
-  "version": "0.6.52",
-  "manifest_version": 3,
-  "browser_specific_settings": {
-    "gecko": {
-      "strict_min_version": "116.0"
+    "name": "True Ignore (EXBO Forum)",
+    "description": "Теперь игнорируемые пользователи точно будут скрыты от ваших глаз!",
+    "version": "0.6.52",
+    "manifest_version": 3,
+    "browser_specific_settings": {
+        "gecko": {
+            "strict_min_version": "116.0"
+        },
+        "gecko_android": {
+            "strict_min_version": "116.0"
+        }
     },
-    "gecko_android": {
-      "strict_min_version": "116.0"
-    }
-  },
-  "icons": {
-    "128": "icons/logo.png"
-  },
-  "action": {
-    "default_area": "navbar",
-    "default_icon": "icons/logo.png",
-    "default_popup": "popup.html",
-    "default_title": "True Ignore"
-  },
-  "host_permissions": [
-    "https://forum.exbo.net/*"
-  ],
-  "permissions": [
-    "storage",
-    "activeTabs",
-    "tabs"
-  ],
-  "background": {
-    "scripts": [
-      "background.js"
+    "icons": {
+        "128": "icons/logo.png"
+    },
+    "action": {
+        "default_area": "navbar",
+        "default_icon": "icons/logo.png",
+        "default_popup": "popup.html",
+        "default_title": "True Ignore"
+    },
+    "host_permissions": ["https://forum.exbo.net/*"],
+    "permissions": ["storage", "activeTabs", "tabs"],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        {
+            "all_frames": false,
+            "run_at": "document_end",
+            "js": ["index.js"],
+            "matches": ["https://forum.exbo.net/*"]
+        }
     ]
-  },
-  "content_scripts": [
-    {
-      "all_frames": false,
-      "run_at": "document_end",
-      "js": [
-        "index.js"
-      ],
-      "matches": [
-        "https://forum.exbo.net/*"
-      ]
-    }
-  ]
 }

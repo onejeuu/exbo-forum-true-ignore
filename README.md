@@ -1,25 +1,29 @@
-<h2>"True Ignore (for EXBO Forum)" Source code</h2>
+# True Ignore (EXBO Forum) Web Extension
 
-<br>
+This extension is used for [EXBO Forum](https://forum.exbo.net) and allows you to completely hide ignored users.
 
-build for "Google Chrome" AND "Firefox" browsers:
-<br>
+## Build:
 
-1. <strong>npm run buildAll</strong>
-2. check "build" and "build_firefox" folders
+Build for chrome and firefox:
 
-<hr>
+```bash
+npm run build
+```
 
-build for "Google Chrome" browser:
-<br>
+This will create `build` (chrome) and `build-firefox` (firefox) directories.
 
-1. <strong>npm run buildChrome</strong>
-2. check "build" folder
+Build chrome only:
 
-<hr>
+```bash
+npm run buildChrome
+```
 
-build for "Firefox" browser:
-<br>
+This will create `build` directory.
 
-1. <strong>npm run buildFirefox</strong>
-2. check "build-firefox" folder
+Build firefox only:
+
+```bash
+npm run buildFirefox
+```
+
+This will create `build-firefox` directory.
