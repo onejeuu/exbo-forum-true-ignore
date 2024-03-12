@@ -1,14 +1,17 @@
 import { MutationHandler } from "./base"
 import { StorageKey } from "@/constants"
-import { GetStorageValue } from "@/storage"
 
-const KEY = StorageKey.HideMessages
+const KEY = StorageKey.HideReplies
 const TARGET = "li.item-replies"
 const USERNAME = "span.username"
 
 export class RepliesHandler extends MutationHandler {
     constructor() {
         super(KEY, TARGET, USERNAME)
+    }
+
+    protected async isIgnored(element: HTMLElement) {
+        return await this.inIgnoredUsers(element)
     }
 
     protected async hideElement(element: HTMLElement) {
@@ -22,15 +25,8 @@ export class RepliesHandler extends MutationHandler {
         const usernames = element.querySelectorAll(USERNAME)
         if (!usernames) return
 
-        const ignoredUsers: string[] = await GetStorageValue(StorageKey.IgnoredUsers)
-        if (!ignoredUsers) return
-
         usernames.forEach(async (span) => {
-            const username = span as HTMLElement
-
-            if (ignoredUsers.includes(username.textContent!)) {
-                await this.hideElement(username)
-            }
+            await this.hide(span as HTMLElement)
         })
     }
 
@@ -64,5 +60,5 @@ export class RepliesHandler extends MutationHandler {
 }
 
 export async function hideReplies() {
-    await new RepliesHandler().hide()
+    await new RepliesHandler().start()
 }

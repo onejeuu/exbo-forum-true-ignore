@@ -12,5 +12,5 @@ export class DiscussionsHandler extends MutationHandler {
 }
 
 export async function hideDiscussions() {
-    await new DiscussionsHandler().hide()
+    await new DiscussionsHandler().start()
 }

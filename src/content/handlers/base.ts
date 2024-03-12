@@ -1,8 +1,9 @@
+import { StorageKey } from "@/constants"
 import { GetStorageValue } from "@/storage"
 
 export abstract class MutationHandler {
     private observer: MutationObserver
-    protected options: MutationObserverInit = { childList: true, subtree: true, attributes: true }
+    protected options: MutationObserverInit = { childList: true }
     protected storageKey: string
     protected targetsSelector: string
     protected ignoredSelector: string
@@ -18,7 +19,7 @@ export abstract class MutationHandler {
         this.observer = new MutationObserver(this.callback.bind(this))
     }
 
-    async hide() {
+    async start() {
         if (await this.isDisabled()) return
 
         await this.check()
@@ -43,18 +44,36 @@ export abstract class MutationHandler {
         return (await GetStorageValue(this.storageKey)) !== true
     }
 
-    protected async isIgnored(element: HTMLElement) {
+    protected async haveIgnoredTag(element: HTMLElement) {
         return element.querySelector(this.ignoredSelector) !== null
+    }
+
+    protected async inIgnoredUsers(element: HTMLElement) {
+        const username = element.textContent
+        if (!username) return false
+
+        const ignoredUsers: string[] = await GetStorageValue(StorageKey.IgnoredUsers)
+        if (!ignoredUsers) return false
+
+        return ignoredUsers.includes(username)
+    }
+
+    protected async isIgnored(element: HTMLElement) {
+        return await this.haveIgnoredTag(element)
     }
 
     protected async hideElement(element: HTMLElement) {
         element.style.display = "none"
     }
 
-    protected async handle(element: HTMLElement) {
+    protected async hide(element: HTMLElement) {
         if (await this.isIgnored(element)) {
             await this.hideElement(element)
         }
+    }
+
+    protected async handle(element: HTMLElement) {
+        return this.hide(element)
     }
 
     private async callback(mutationsList: MutationRecord[]) {

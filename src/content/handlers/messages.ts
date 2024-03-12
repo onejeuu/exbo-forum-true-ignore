@@ -12,5 +12,5 @@ export class MessagesHandler extends MutationHandler {
 }
 
 export async function hideMessages() {
-    await new MessagesHandler().hide()
+    await new MessagesHandler().start()
 }
