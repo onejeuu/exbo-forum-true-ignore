@@ -3,11 +3,12 @@ import { StorageKey } from "@/constants"
 
 const KEY = StorageKey.HideReplies
 const TARGET = "li.item-replies"
+
 const USERNAME = "span.username"
 
 export class RepliesHandler extends MutationHandler {
     constructor() {
-        super(KEY, TARGET, USERNAME)
+        super(KEY, TARGET)
     }
 
     protected async isIgnored(element: HTMLElement) {
@@ -15,7 +16,7 @@ export class RepliesHandler extends MutationHandler {
     }
 
     protected async hideElement(element: HTMLElement) {
-        element.style.display = "none"
+        super.hideElement(element)
 
         this.hideEmptySummary(element)
         this.removeConjunction(element)

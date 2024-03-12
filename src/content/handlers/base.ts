@@ -6,10 +6,10 @@ export abstract class MutationHandler {
     protected options: MutationObserverInit = { childList: true }
     protected storageKey: string
     protected targetsSelector: string
-    protected ignoredSelector: string
+    protected ignoredSelector?: string
     protected targets: NodeListOf<Element>
 
-    constructor(storageKey: string, targetsSelector: string, ignoredSelector: string) {
+    constructor(storageKey: string, targetsSelector: string, ignoredSelector?: string) {
         this.storageKey = storageKey
         this.targetsSelector = targetsSelector
         this.ignoredSelector = ignoredSelector
@@ -45,6 +45,7 @@ export abstract class MutationHandler {
     }
 
     protected async haveIgnoredTag(element: HTMLElement) {
+        if (!this.ignoredSelector) return false
         return element.querySelector(this.ignoredSelector) !== null
     }
 
