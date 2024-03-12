@@ -2,7 +2,7 @@ import { GetStorageValue } from "@/storage"
 
 export abstract class MutationHandler {
     private observer: MutationObserver
-    private options: MutationObserverInit = { childList: true, subtree: true, attributes: true }
+    protected options: MutationObserverInit = { childList: true, subtree: true, attributes: true }
     protected storageKey: string
     protected targetsSelector: string
     protected ignoredSelector: string
