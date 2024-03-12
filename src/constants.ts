@@ -6,7 +6,7 @@ export enum MessagesType {
 
 export enum StorageKey {
     HideDiscussions = "hideDiscussions",
-    HideMessages = "hideMessages",
+    HidePosts = "hidePosts",
     HideReplies = "hideReplies",
     IgnoredUsers = "ignoredUsers",
 }

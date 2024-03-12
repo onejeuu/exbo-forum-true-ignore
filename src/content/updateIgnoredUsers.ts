@@ -1,9 +1,9 @@
 import { StorageKey } from "@/constants"
-import { SetStorageValue } from "@/storage"
+import { Storage } from "@/storage"
 
 export async function updateIgnoredUsers() {
     const usernames = collectIgnoredUsers()
-    await SetStorageValue(StorageKey.IgnoredUsers, usernames)
+    await Storage.set(StorageKey.IgnoredUsers, usernames)
 }
 
 export function collectIgnoredUsers(): string[] {

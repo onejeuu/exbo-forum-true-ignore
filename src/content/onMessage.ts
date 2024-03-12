@@ -1,7 +1,7 @@
 import { MessagesType } from "@/constants"
 
 import { hideDiscussions } from "./handlers/discussions"
-import { hideMessages } from "./handlers/messages"
+import { hidePosts } from "./handlers/posts"
 import { hideReplies } from "./handlers/replies"
 import { hideRepliesPreview } from "./handlers/repliesPreview"
 import { updateIgnoredUsers } from "./updateIgnoredUsers"
@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(async (message: string, sender: chrome.runt
             break
         }
         case MessagesType.HidePosts: {
-            await hideMessages()
+            await hidePosts()
             await hideReplies()
             await hideRepliesPreview()
             break

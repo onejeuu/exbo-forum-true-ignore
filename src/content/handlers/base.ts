@@ -1,5 +1,5 @@
 import { StorageKey } from "@/constants"
-import { GetStorageValue } from "@/storage"
+import { Storage } from "@/storage"
 
 export abstract class MutationHandler {
     private observer: MutationObserver
@@ -41,7 +41,7 @@ export abstract class MutationHandler {
     }
 
     protected async isDisabled() {
-        return (await GetStorageValue(this.storageKey)) !== true
+        return (await Storage.get(this.storageKey)) !== true
     }
 
     protected async haveIgnoredTag(element: HTMLElement) {
@@ -53,7 +53,7 @@ export abstract class MutationHandler {
         const username = element.textContent
         if (!username) return false
 
-        const ignoredUsers: string[] = await GetStorageValue(StorageKey.IgnoredUsers)
+        const ignoredUsers: string[] = await Storage.get(StorageKey.IgnoredUsers)
         if (!ignoredUsers) return false
 
         return ignoredUsers.includes(username)
