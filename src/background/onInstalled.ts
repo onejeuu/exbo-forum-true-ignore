@@ -1,10 +1,10 @@
-import { StorageKeys } from "@/constants"
+import { StorageKey } from "@/constants"
 import { SetDefaultStorageValue } from "@/storage"
 
 chrome.runtime.onInstalled.addListener(async (details: chrome.runtime.InstalledDetails) => {
     if (details.reason === "install") {
-        for (const key of Object.values(StorageKeys)) {
-            await SetDefaultStorageValue(key, true)
-        }
+        await SetDefaultStorageValue(StorageKey.HideDiscussions, true)
+        await SetDefaultStorageValue(StorageKey.HideMessages, true)
+        await SetDefaultStorageValue(StorageKey.HideReplies, true)
     }
 })

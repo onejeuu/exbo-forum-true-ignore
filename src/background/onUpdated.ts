@@ -1,4 +1,4 @@
-import { MessagesTypes } from "@/constants"
+import { MessagesType } from "@/constants"
 
 chrome.tabs.onUpdated.addListener(function (
     tabId: number,
@@ -6,17 +6,18 @@ chrome.tabs.onUpdated.addListener(function (
     tab: chrome.tabs.Tab
 ) {
     if (changeInfo.status === "complete") {
-        const url = new URL(tab.url!)
+        if (!tab.url) return
+        const url = new URL(tab.url)
 
         if (url.hostname === "forum.exbo.net") {
-            let message: MessagesTypes | null = null
+            let message: MessagesType | null = null
 
             if (url.href === "https://forum.exbo.net/") {
-                message = MessagesTypes.DeleteDiscussionsSubscribe
+                message = MessagesType.HideDiscussions
             } else if (url.pathname.startsWith("/d/")) {
-                message = MessagesTypes.DeleteMessagesInDiscussions
+                message = MessagesType.HidePosts
             } else if (url.pathname === "/ignoredUsers") {
-                message = MessagesTypes.CollectIgnoredUsers
+                message = MessagesType.UpdateIgnoredUsers
             }
 
             if (message) {

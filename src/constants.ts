@@ -1,19 +1,12 @@
-export enum MessagesTypes {
-    DeleteDiscussionsSubscribe = "deleteDiscussionsSubscribe",
-    DeleteMessagesInDiscussions = "deleteMessagesInDiscussions",
-    CollectIgnoredUsers = "collectIgnoredUsers",
+export enum MessagesType {
+    HideDiscussions = "hideDiscussions",
+    HidePosts = "hidePosts",
+    UpdateIgnoredUsers = "updateIgnoredUsers",
 }
 
-export enum StorageKeys {
+export enum StorageKey {
     HideDiscussions = "hideDiscussions",
     HideMessages = "hideMessages",
-    HideNotifications = "hideNotifications",
+    HideReplies = "hideReplies",
     IgnoredUsers = "ignoredUsers",
 }
-
-export enum ClassTypes {
-    HasEvent = "hasEvent",
-    HideElement = "hideElement",
-}
-
-export const intervalTickrate: number = 16.66666667

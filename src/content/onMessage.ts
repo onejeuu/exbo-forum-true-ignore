@@ -1,27 +1,24 @@
-import { MessagesTypes, intervalTickrate } from "@/constants"
+import { MessagesType } from "@/constants"
 
-import { HideNotifications } from "./hideNotifications"
-import { HideDiscussions } from "./hideDiscussions"
-import { HideMessagesInDiscussions } from "./hideMessagesInDiscussions"
-import { CollectIgnoredUsers } from "./collectIgnoredUsers"
+import { hideDiscussions } from "./handlers/discussions"
+import { hideMessages } from "./handlers/messages"
+import { hideReplies } from "./handlers/replies"
+import { updateIgnoredUsers } from "./updateIgnoredUsers"
 
 chrome.runtime.onMessage.addListener(async (message: string, sender: chrome.runtime.MessageSender) => {
-    setTimeout(async () => {
-        HideNotifications()
-
-        switch (message) {
-            case MessagesTypes.DeleteDiscussionsSubscribe: {
-                await HideDiscussions()
-                break
-            }
-            case MessagesTypes.DeleteMessagesInDiscussions: {
-                await HideMessagesInDiscussions()
-                break
-            }
-            case MessagesTypes.CollectIgnoredUsers: {
-                await CollectIgnoredUsers()
-                break
-            }
+    switch (message) {
+        case MessagesType.HideDiscussions: {
+            await hideDiscussions()
+            break
         }
-    }, intervalTickrate)
+        case MessagesType.HidePosts: {
+            await hideMessages()
+            await hideReplies()
+            break
+        }
+        case MessagesType.UpdateIgnoredUsers: {
+            await updateIgnoredUsers()
+            break
+        }
+    }
 })

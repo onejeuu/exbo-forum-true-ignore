@@ -14,9 +14,9 @@ node_modules/
 # Temporary files
 temp/
 
-# General build artifacts
+# Chrome build
 build/
 
-# Firefox extension build artifacts
+# Firefox build
 build-firefox/
 

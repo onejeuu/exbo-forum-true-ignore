@@ -1,4 +1,4 @@
-import { StorageKeys } from "@/constants"
+import { StorageKey } from "@/constants"
 import { GetStorageValue, ToggleStorageValue } from "@/storage"
 
 const handleToggle = async (elementId: string, storageKey: string) => {
@@ -14,9 +14,9 @@ const handleToggle = async (elementId: string, storageKey: string) => {
 }
 
 const init = async () => {
-    await handleToggle("toggle-posts", StorageKeys.HideDiscussions)
-    await handleToggle("toggle-messages", StorageKeys.HideMessages)
-    await handleToggle("toggle-notifications", StorageKeys.HideNotifications)
+    await handleToggle("toggle-posts", StorageKey.HideDiscussions)
+    await handleToggle("toggle-messages", StorageKey.HideMessages)
+    await handleToggle("toggle-replies", StorageKey.HideReplies)
 }
 
 init()
