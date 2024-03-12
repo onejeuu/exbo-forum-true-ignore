@@ -34,7 +34,7 @@ export class RepliesHandler extends MutationHandler {
         const summary = element.parentElement?.parentElement!
         const usernames = summary.querySelectorAll(USERNAME)
 
-        const footerIsEmpty = Array.from(usernames).every(function (username) {
+        const footerIsEmpty = Array.from(usernames).every((username) => {
             return window.getComputedStyle(username).display === "none"
         })
 

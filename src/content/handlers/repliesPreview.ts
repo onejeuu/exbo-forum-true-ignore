@@ -17,11 +17,7 @@ export class RepliesPreviewHandler extends MutationHandler {
 
     protected async hideElement(element: HTMLElement) {
         element.style.display = "none"
-
-        this.hideEmptyPreview(element)
     }
-
-    private hideEmptyPreview(element: HTMLElement) {}
 }
 
 export async function hideRepliesPreview() {
