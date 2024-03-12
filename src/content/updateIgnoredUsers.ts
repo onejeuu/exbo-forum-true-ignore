@@ -4,6 +4,7 @@ import { Storage } from "@/storage"
 export async function updateIgnoredUsers() {
     const usernames = collectIgnoredUsers()
     await Storage.set(StorageKey.IgnoredUsers, usernames)
+    window.alert("True Ignore\nСписок игнорируемых пользователей успешно обновлен.")
 }
 
 export function collectIgnoredUsers(): string[] {
