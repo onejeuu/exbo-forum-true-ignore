@@ -2,17 +2,16 @@ import { StorageKey } from "@/constants"
 import { Storage } from "@/storage"
 
 export async function updateIgnoredUsers() {
-    const usernames = collectIgnoredUsers()
+    const usernames = await collectIgnoredUsers()
     await Storage.set(StorageKey.IgnoredUsers, usernames)
     window.alert("True Ignore\nСписок игнорируемых пользователей успешно обновлен.")
 }
 
-export function collectIgnoredUsers(): string[] {
+async function collectIgnoredUsers() {
     const table = document.querySelector("table.NotificationGrid")!
+    const spans = table.querySelectorAll("span.username")
 
-    const usernamesValues = table.querySelectorAll("span.username")
-
-    const usernames: string[] = Array.from(usernamesValues, (span) => span.textContent || "").filter(
+    let usernames: string[] = Array.from(spans, (span) => span.textContent || "").filter(
         (username) => username.trim() !== ""
     )
 

@@ -6,6 +6,8 @@ const TARGET = "li.item-replies"
 
 const USERNAME = "span.username"
 
+const CONJUNCTIONS = ["и", ","]
+
 export class RepliesHandler extends MutationHandler {
     constructor() {
         super(KEY, TARGET)
@@ -16,10 +18,10 @@ export class RepliesHandler extends MutationHandler {
     }
 
     protected async hideElement(element: HTMLElement) {
-        super.hideElement(element)
+        await super.hideElement(element)
 
         this.hideEmptySummary(element)
-        this.removeConjunction(element)
+        this.removeConjunctions(element)
     }
 
     protected async handle(element: HTMLElement) {
@@ -44,17 +46,24 @@ export class RepliesHandler extends MutationHandler {
         }
     }
 
-    private removeConjunction(element: HTMLElement) {
-        const CONJUNCTIONS = ["и", ","]
+    private removeConjunctions(element: HTMLElement) {
+        const href = element.parentElement!
 
-        const parent = element.parentElement
-        const previousNode = parent?.previousSibling
+        const previousNode = href?.previousSibling
+        const nextNode = href?.nextSibling
 
-        if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
-            const text = previousNode.nodeValue?.trim() || ""
+        const summary = href.parentElement!
+
+        this.removeTextNode(summary, previousNode)
+        this.removeTextNode(summary, nextNode)
+    }
+
+    private removeTextNode(summary: HTMLElement, node: ChildNode | null) {
+        if (node && node.nodeType === Node.TEXT_NODE) {
+            const text = node.nodeValue?.trim() || ""
 
             if (CONJUNCTIONS.includes(text)) {
-                parent.parentNode?.removeChild(previousNode)
+                summary.removeChild(node)
             }
         }
     }

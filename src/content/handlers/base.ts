@@ -60,7 +60,7 @@ export abstract class MutationHandler {
     }
 
     protected async isIgnored(element: HTMLElement) {
-        return await this.haveIgnoredTag(element)
+        return (await this.haveIgnoredTag(element)) || (await this.inIgnoredUsers(element))
     }
 
     protected async hideElement(element: HTMLElement) {
