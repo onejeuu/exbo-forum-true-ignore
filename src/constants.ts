@@ -1,6 +1,6 @@
 export enum MessagesType {
-    HideDiscussions = "hideDiscussions",
-    HidePosts = "hidePosts",
+    HandleDiscussions = "handleDiscussions",
+    HandlePosts = "handlePosts",
     UpdateIgnoredUsers = "updateIgnoredUsers",
 }
 

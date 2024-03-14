@@ -13,9 +13,9 @@ chrome.tabs.onUpdated.addListener(function (
             let message: MessagesType | null = null
 
             if (url.href === "https://forum.exbo.net/") {
-                message = MessagesType.HideDiscussions
+                message = MessagesType.HandleDiscussions
             } else if (url.pathname.startsWith("/d/")) {
-                message = MessagesType.HidePosts
+                message = MessagesType.HandlePosts
             } else if (url.pathname === "/ignoredUsers") {
                 message = MessagesType.UpdateIgnoredUsers
             }

@@ -8,11 +8,11 @@ import { updateIgnoredUsers } from "./updateIgnoredUsers"
 
 chrome.runtime.onMessage.addListener(async (message: string, sender: chrome.runtime.MessageSender) => {
     switch (message) {
-        case MessagesType.HideDiscussions: {
+        case MessagesType.HandleDiscussions: {
             await hideDiscussions()
             break
         }
-        case MessagesType.HidePosts: {
+        case MessagesType.HandlePosts: {
             await hidePosts()
             await hideReplies()
             await hideRepliesPreview()
